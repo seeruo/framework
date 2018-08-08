@@ -19,12 +19,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Seeruo\\": "src/Seeruo/"
+            "Seeruo\\": "src/seeruo-framework/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Seeruo\\": "src/Seeruo/"
+            "Seeruo\\": "src/seeruo-framework/"
         }
     },
     "minimum-stability": "dev"
