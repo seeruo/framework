@@ -1,5 +1,5 @@
 {
-    "name": "seeruo/seeruo-framework",
+    "name": "seeruo/framework",
     "description": "this is a tool that build static website by php",
     "type": "library",
     "require": {
