@@ -20,16 +20,16 @@ class App
         'title'             => '我的博客',          // 网站名称
         'url'               => '',                  // 网站URL
         'themes'            => 'default',           // 网站主题
-        'author'            => 'danier',            // 您的名字
+        'author'            => 'your name',         // 您的名字
         'home_page'         => '',                  // 主页文件
         // 本地调试设置
         'server_address'    => 'localhost:9001',    // 本地服务器调试地址
         'auto_open'         => false,               // 自动打开浏览器
         // 发布到服务器空间
-        'push_type'         => 'ssh',               // 推送到服务器的方式 ssh/git
+        'push_type'         => 'ssh',               // 暂时只支持ssh方式，需要服务器开启的SSH支持
         'push_user'         => 'root',              // SSH账号
         'push_address'      => '127.0.0.1',         // SSH推送地址
-        'push_path'         => '/var/www/html/blog',// SSH推送路径,该服务器的路径必须要开启写权限
+        'push_path'         => '/var/www/html/blog',// SSH服务器网站根路径,该路径需开启写权限
     ];
 
     /**
