@@ -45,6 +45,7 @@ class File
      */
     static public function getContent($file_path)
     {
+        $file_path = trim($file_path);
         // 初始配置
         $file_set = [
             'file_uuid' => md5($file_path),

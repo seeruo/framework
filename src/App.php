@@ -25,6 +25,7 @@ class App
         'push_user'         => 'root',              // SSH账号
         'push_address'      => '127.0.0.1',         // SSH推送地址
         'push_path'         => '/var/www/html/blog',// SSH推送路径,该服务器的路径必须要开启写权限
+        'home_page'         => '',           // 主页
     ];
 
     /**

@@ -18,8 +18,8 @@
 			<div class="all-list">
 		        <ul>
 		        {% for item in articles_list %}
-		            <li><a href="{{ item.href }}" 
-		            	{% if active == item.active %} class="active" {% endif %} >
+		            <li><a href="{{ item.href }}"
+		            	{% if active_key == item.active_index %} class="active" {% endif %} >
 		            	{{ item.title }}</a>
 		           	</li>
 		        {% endfor %}
@@ -28,7 +28,8 @@
 		</div>
 		<div class="content">
 			<div class="markdown-body">
-			{{content}}
+				<h1>{{title}}</h1>
+				{{ content|raw }}
 			</div>
 		</div>
 	</main>

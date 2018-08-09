@@ -39,7 +39,7 @@ class Build
     }
 
     /**
-     * 复制静态资源文件
+     * 静态资源文件转移
      * @return [type] [description]
      */
     private function buildStatic()
@@ -48,7 +48,6 @@ class Build
         array_walk($files, function ($file)
         {
             $to_path = str_replace($this->themes_dir.'static', $this->public_dir.'static', $file['file_path']);
-            // Log::debug($to_path);
             File::copyFolder($file['file_path'], $to_path);
         });
     }
@@ -58,14 +57,26 @@ class Build
      */
     public function buildIndex()
     {
-        $file['web_title'] = $this->config['title'];
         // 获取文件属性
         $files_list = $this->sortByTime();
-        // 获取文件索引
-        $index = $this->resolveIndex($files_list);
-        // 获取文件内容
-        $file['articles_list'] = $index;
-        // Log::debug($file);
+        // 解析文件索引
+        $index = [];
+        $this->resolveIndex($files_list, $index);
+        // 设置页面变量
+        $file = [];
+        // 检查是否设置了主页
+        $home_page = $this->source_dir . $this->config['home_page'];
+        if ( !empty($this->config['home_page']) && file_exists($home_page) ) {
+            // markdown 2 html
+            $Parsedown = new \Parsedown();
+            $home_page = File::getContent($home_page);
+            $file = $home_page['setting'];
+            $file['content'] = $Parsedown->text( $home_page['content'] );
+            $file['articles_list'] = $index;
+        }else{
+            $file['articles_list'] = $index;
+        }
+        $file['web_title'] = $this->config['title'];  // 网站标题
         $html = $this->render('index.tmp', $file);
         $file_path = $this->public_dir . 'index.html';
         File::createFile($file_path, $html);
@@ -78,25 +89,28 @@ class Build
     {
         // 获取文件属性
         $files_list = $this->sortByTime();
-        // 获取文件索引
-        $index = $this->resolveIndex($files_list);
+        // 解析文件索引
+        $index = [];
+        $this->resolveIndex($files_list, $index);
         $site_title = $this->config['title'];
-            // Log::debug($index);
+        $Parsedown = new \Parsedown();
         foreach ($files_list as $key => $file) {
-            // 获取文件内容
-            $file['web_title'] = $site_title;
-            $file['content'] = File::getContent($file['file_path'])['content'];
+            // markdown 2 html
+            $content = File::getContent($file['file_path'])['content'];
+            $content = $Parsedown->text($content);
+            $file['content'] = $content;
             $file['articles_list'] = $index;
-            $file['active'] = $key;
-            // Log::debug($file);
+            $file['active_key'] = $key;
             $html = $this->render('article.tmp', $file);
             File::createFile($file['public_dir'], $html);
         }
     }
 
-    public function resolveIndex(&$files_list)
+    /**
+     * 解析文章索引及URL
+     */
+    public function resolveIndex(&$files_list, &$index)
     {
-        $index = [];
         foreach ($files_list as $key => &$file) {
             // 解析文件名
             $file_name = $file['file_name'];
@@ -106,17 +120,16 @@ class Build
             $date = empty($file['date']) ? date('Y-m-d') : date('Y-m-d', strtotime($file['date']));
             $date_arr = explode('-', $date);
             $file_herf = 'articles' . DIRECTORY_SEPARATOR . $date_arr[0] . DIRECTORY_SEPARATOR . $date_arr[1] . DIRECTORY_SEPARATOR . $date_arr[2] . DIRECTORY_SEPARATOR . $file_name . DIRECTORY_SEPARATOR . 'index.html';
-            $file['href'] = DIRECTORY_SEPARATOR . $file_herf;
-            // Log::debug($file);
-            $file['public_dir'] = $this->public_dir . $file_herf;
+            $file['href'] = DIRECTORY_SEPARATOR . $file_herf;       // 文章URL
+            $file['public_dir'] = $this->public_dir . $file_herf;   // 文件生成路径
+            $file['web_title'] = $this->config['title'];            // 网站标题
             $index[] = [
                 'href'  => $file['href'],
                 'title' => $file['title'],
                 'alt'   => $file['title'],
-                'active' => $key
+                'active_index' => $key
             ];
         }
-        return $index;
     }
     /**
      * 生成文件路径名:已时间归档的方式构建
@@ -139,7 +152,7 @@ class Build
     }
 
     /**
-     * 对文件数组按时间先后顺序重新排序 冒泡排序
+     * 对文件数组按时间先后顺序重新排序，并去除是主页的文件
      * @param  [type] $file_list [description]
      * @return [type]            [description]
      */
@@ -153,6 +166,16 @@ class Build
                     $temp = $files[$j+1];
                     $files[$j+1] = $files[$j];
                     $files[$j] = $temp;
+                }
+            }
+        }
+
+        // 检查是否设置了主页
+        $home_page = $this->source_dir . $this->config['home_page'];
+        if ( !empty($this->config['home_page']) && file_exists($home_page) ) {
+            foreach ($files as $key => $file) {
+                if ($home_page == $file['file_path']) {
+                    unset($files[$key]);
                 }
             }
         }
