@@ -28,7 +28,7 @@
 		</div>
 		<div class="content">
 			<div class="markdown-body">
-				<h1>{{title}}</h1>
+				<h2>{{title}}</h2>
 				{{ content|raw }}
 			</div>
 		</div>
