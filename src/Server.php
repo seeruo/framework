@@ -43,4 +43,28 @@ class Server
             Log::info($e->getMessage());
         }
     }
+    /**
+     * [develop sever]
+     * @return [type] [description]
+     */
+    public function develop()
+    {
+        try {
+            if ( $this->config['auto_open'] ) {
+                if (strstr(PHP_OS, 'WIN')) {
+                    $win_cmd = 'explorer http://'. $this->config['server_address'];
+                    Cmd::system($win_cmd, $this->config['root'], 'Open Explorer');
+                }else{
+                    $mac_cmd = 'open http://'. $this->config['server_address'];
+                    Cmd::system($mac_cmd, $this->config['root'], 'Open Explorer');
+                }
+            }
+            // 开启服务器
+            Log::info('请浏览器里预览生成的网站效果，地址：http://'.$this->config['server_address']);
+            $cmd = 'php -S ' . $this->config['server_address'] . ' -t ' . $this->app_root;
+            Cmd::system($cmd, $this->config['root'], 'Create One WebServer');
+        } catch (Exception $e) {
+            Log::info($e->getMessage());
+        }
+    }
 }

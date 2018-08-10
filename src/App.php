@@ -4,6 +4,7 @@ namespace Seeruo;
 use Exception;
 use \Seeruo\Cmd;
 use \Seeruo\Log;
+use \Seeruo\Build;
 
 /**
 * 框架主类
@@ -56,9 +57,16 @@ class App
 
     /**
      * 执行入口
+     * $model 开发模式 cli命令行模式，web网页模式
      */
-    public function run()
+    public function run($model='cli')
     {
+        // 如果是网页请求模式
+        if ($model=='web') {
+            $model = new \Seeruo\Build($this->config);
+            $model->web();
+            exit;
+        }
         // 解析命令
         Cmd::parse();
         // 检测需要执行的指令
@@ -92,7 +100,13 @@ class App
         // 本地调试服务器
         if (Cmd::has('s') || Cmd::has('server')) {
             $model = new \Seeruo\Server($this->config);
-            $model->run();
+            $model->test();
+            exit;
+        }
+        // 本地调试服务器
+        if (Cmd::has('d') || Cmd::has('develop')) {
+            $model = new \Seeruo\Server($this->config);
+            $model->develop();
             exit;
         }
         // 发布网站到服务器

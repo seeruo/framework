@@ -19,6 +19,7 @@ class Build
         $this->themes_dir = $config['themes_dir'].DIRECTORY_SEPARATOR;
         $this->public_dir = $config['public_dir'].DIRECTORY_SEPARATOR;
         $this->source_dir = $config['source_dir'].DIRECTORY_SEPARATOR;
+        $this->files_list
     }
     /**
      * 生成HTML文件,放到Public
@@ -37,6 +38,15 @@ class Build
             Log::info('Build failed!');
         }
     }
+    /**
+     * 创建主页文件
+     */
+    public function createFileIndex()
+    {
+        $html = $this->buildIndex();
+        $file_path = $this->public_dir . 'index.html';
+        File::createFile($file_path, $html);
+    }
 
     /**
      * 静态资源文件转移
@@ -51,7 +61,6 @@ class Build
             File::copyFolder($file['file_path'], $to_path);
         });
     }
-
     /**
      * 构建主页静态文件
      */
@@ -77,9 +86,7 @@ class Build
             $file['articles_list'] = $index;
         }
         $file['web_title'] = $this->config['title'];  // 网站标题
-        $html = $this->render('index.tmp', $file);
-        $file_path = $this->public_dir . 'index.html';
-        File::createFile($file_path, $html);
+        return $this->render('index.tmp', $file);
     }
 
     /**
@@ -106,31 +113,6 @@ class Build
         }
     }
 
-    /**
-     * 解析文章索引及URL
-     */
-    public function resolveIndex(&$files_list, &$index)
-    {
-        foreach ($files_list as $key => &$file) {
-            // 解析文件名
-            $file_name = $file['file_name'];
-            $file_type = substr(strrchr($file_name, '.'), 1);
-            $file_name = basename($file_name, '.'.$file_type);
-            // 时间解析
-            $date = empty($file['date']) ? date('Y-m-d') : date('Y-m-d', strtotime($file['date']));
-            $date_arr = explode('-', $date);
-            $file_herf = 'articles' . DIRECTORY_SEPARATOR . $date_arr[0] . DIRECTORY_SEPARATOR . $date_arr[1] . DIRECTORY_SEPARATOR . $date_arr[2] . DIRECTORY_SEPARATOR . $file_name . DIRECTORY_SEPARATOR . 'index.html';
-            $file['href'] = DIRECTORY_SEPARATOR . $file_herf;       // 文章URL
-            $file['public_dir'] = $this->public_dir . $file_herf;   // 文件生成路径
-            $file['web_title'] = $this->config['title'];            // 网站标题
-            $index[] = [
-                'href'  => $file['href'],
-                'title' => $file['title'],
-                'alt'   => $file['title'],
-                'active_index' => $key
-            ];
-        }
-    }
     /**
      * 生成文件路径名:已时间归档的方式构建
      * @param  [type] $file_conf [文件配置]
@@ -176,10 +158,36 @@ class Build
             foreach ($files as $key => $file) {
                 if ($home_page == $file['file_path']) {
                     unset($files[$key]);
+                    continue;
                 }
             }
         }
         return $files;
+    }
+    /**
+     * 解析文章索引及URL
+     */
+    public function resolveIndex(&$files_list, &$index)
+    {
+        foreach ($files_list as $key => &$file) {
+            // 解析文件名
+            $file_name = $file['file_name'];
+            $file_type = substr(strrchr($file_name, '.'), 1);
+            $file_name = basename($file_name, '.'.$file_type);
+            // 时间解析
+            $date = empty($file['date']) ? date('Y-m-d') : date('Y-m-d', strtotime($file['date']));
+            $date_arr = explode('-', $date);
+            $file_herf = 'articles' . DIRECTORY_SEPARATOR . $date_arr[0] . DIRECTORY_SEPARATOR . $date_arr[1] . DIRECTORY_SEPARATOR . $date_arr[2] . DIRECTORY_SEPARATOR . $file_name . DIRECTORY_SEPARATOR . 'index.html';
+            $file['href'] = DIRECTORY_SEPARATOR . $file_herf;       // 文章URL
+            $file['public_dir'] = $this->public_dir . $file_herf;   // 文件生成路径
+            $file['web_title'] = $this->config['title'];            // 网站标题
+            $index[] = [
+                'href'  => $file['href'],
+                'title' => $file['title'],
+                'alt'   => $file['title'],
+                'active_index' => $key
+            ];
+        }
     }
 
     /**
@@ -199,5 +207,20 @@ class Build
         $template = $twig->loadTemplate($file);
         $html = $template->render($data);
         return $html;
+    }
+
+    /**********************************************************************************************************************
+     * 网页模式
+     **********************************************************************************************************************/
+    /**
+     * 网页模式入口
+     */
+    public function web()
+    {
+        $html = $this->buildIndex();
+        $static_dir = str_replace($this->config['root'], '', $this->config['themes_dir']);
+        $static_dir = str_replace('\\', '/', $static_dir);
+        $html = str_replace('href="/static/', 'href="'.$static_dir.'/static/', $html);
+        echo $html;
     }
 }
