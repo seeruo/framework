@@ -63,6 +63,7 @@ class App
     {
         // 如果是网页请求模式
         if ($model=='web') {
+            $this->config['web_develop'] = true;
             $model = new \Seeruo\Build($this->config);
             $model->web();
             exit;
@@ -97,22 +98,22 @@ class App
             $model->run();
             exit;
         }
+        // 发布网站到服务器
+        if (Cmd::has('p') || Cmd::has('push')) {
+            $model = new \Seeruo\Push($this->config);
+            $model->run();
+            exit;
+        }
         // 本地调试服务器
         if (Cmd::has('s') || Cmd::has('server')) {
             $model = new \Seeruo\Server($this->config);
-            $model->test();
+            $model->preview();
             exit;
         }
         // 本地调试服务器
         if (Cmd::has('d') || Cmd::has('develop')) {
             $model = new \Seeruo\Server($this->config);
             $model->develop();
-            exit;
-        }
-        // 发布网站到服务器
-        if (Cmd::has('p') || Cmd::has('push')) {
-            $model = new \Seeruo\Push($this->config);
-            $model->run();
             exit;
         }
     }

@@ -7,5 +7,5 @@ return [
 	'push_user'         => 'root',              // SSH账号
 	'push_address'      => '127.0.0.1',     	// SSH推送地址
 	'push_path'         => '/var/www/html/blog',// SSH服务器网站根路径,该路径需开启写权限
-    'home_page'         => '',           // 主页
+    // 'home_page'         => 'home.md',           // 主页
 ];

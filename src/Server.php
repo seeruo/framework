@@ -20,10 +20,10 @@ class Server
     }
 
     /**
-     * [run description]
+     * [预览]
      * @return [type] [description]
      */
-    public function run()
+    public function preview()
     {
         try {
             if ( $this->config['auto_open'] ) {
@@ -44,7 +44,7 @@ class Server
         }
     }
     /**
-     * [develop sever]
+     * [开发]
      * @return [type] [description]
      */
     public function develop()

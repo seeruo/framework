@@ -48,7 +48,6 @@ class File
         $file_path = trim($file_path);
         // 初始配置
         $file_set = [
-            'file_uuid' => md5($file_path),
             'file_name' => basename($file_path),
             'file_dire' => dirname($file_path),
             'file_path' => dirname($file_path). DIRECTORY_SEPARATOR . basename($file_path),

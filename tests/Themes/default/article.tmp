@@ -19,7 +19,7 @@
 		        <ul>
 		        {% for item in articles_list %}
 		            <li><a href="{{ item.href }}"
-		            	{% if active_key == item.active_index %} class="active" {% endif %} >
+		            	{% if page_uuid == item.uuid %} class="active" {% endif %} >
 		            	{{ item.title }}</a>
 		           	</li>
 		        {% endfor %}
