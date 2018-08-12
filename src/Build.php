@@ -4,6 +4,7 @@ namespace Seeruo;
 use Exception;
 use \Seeruo\File;
 use \Seeruo\Log;
+use \Seeruo\Curl;
 
 /**
  * Build
@@ -16,24 +17,26 @@ class Build
     private $source_dir;        // 源文件路径
     private $files;             // 文件组
     private $index;             // 索引组
+    private $markd2html;        // 解析markdown的对象
 
     public function __construct($config){
         $this->config = $config;
         $this->themes_dir = $config['themes_dir'].DIRECTORY_SEPARATOR;
         $this->public_dir = $config['public_dir'].DIRECTORY_SEPARATOR;
         $this->source_dir = $config['source_dir'].DIRECTORY_SEPARATOR;
+        $this->markd2html = new \Parsedown();
     }
     /**
-     * 生成HTML文件,放到Public
+     * 构建静态网站所需文件
      */
     public function run()
     {
         try {
             Log::info('Start build...');
-            // @静态文件构建
-            $this->buildStatic();
             // @解析文件设置
             $this->sortByTime();
+            // @静态文件构建
+            $this->buildStatic();
             // @生成文章信息
             $this->buildIndex();
             $this->buildArticles();
@@ -45,8 +48,10 @@ class Build
     }
 
     /**
-     * 静态资源文件转移
-     * @return [type] [description]
+     * [buildStatic 静态资源文件转移]
+     * @Author   danier     cdking95@gmail.com
+     * @DateTime 2018-08-12
+     * @return   [type]
      */
     private function buildStatic()
     {
@@ -57,34 +62,25 @@ class Build
             File::copyFolder($file['file_path'], $to_path);
         });
     }
+
     /**
-     * 构建主页静态文件
+     * [buildIndex 构建主页静态文件]
+     * @Author   danier     cdking95@gmail.com
+     * @DateTime 2018-08-12
+     * @return   [type]
      */
     public function buildIndex()
     {
-        // 设置页面变量
-        $file = [];
-        // 检查是否设置了主页
-        $file_path = $this->source_dir . $this->config['home_page'];
-        if ( !empty($this->config['home_page']) && file_exists($file_path) ) {
-            // markdown 2 html
-            $file = $this->files[md5($file_path)];
-            $file_data = File::getContent($file['file_path']);
-            $file = $file_data['setting'];
-            $Parsedown = new \Parsedown();
-            $file['content'] = $Parsedown->text( $file_data['content'] );
-            $file['articles_list'] = $this->index;
-        }else{
-            $file['articles_list'] = $this->index;
-        }
-        $file['web_title'] = $this->config['title'];  // 网站标题
-        $html = $this->render('index.tmp', $file);
         $file_path = $this->public_dir . 'index.html';
+        $html = $this->makeIndex();
         File::createFile($file_path, $html);
     }
 
     /**
-     * 构建文章静态文件
+     * [buildArticles 构建文章静态文件]
+     * @Author   danier     cdking95@gmail.com
+     * @DateTime 2018-08-12
+     * @return   [type]
      */
     public function buildArticles()
     {
@@ -92,35 +88,47 @@ class Build
         $site_title = $this->config['title'];
         $Parsedown = new \Parsedown();
         foreach ($this->files as $key => $file) {
-            $file_data = File::getContent($file['file_path']);
-            $Parsedown = new \Parsedown();
-            $file['content'] = $Parsedown->text( $file_data['content'] );
-            $file['articles_list'] = $this->index;
-            $file['active_key'] = $key;
-            $html = $this->render('article.tmp', $file);
-            // Log::debug($html);
+            $html = $this->makeArticle($file['page_uuid']);
             File::createFile($file['public_dir'], $html);
         }
     }
 
     /**
-     * 生成文件路径名:已时间归档的方式构建
-     * @param  [type] $file_conf [文件配置]
-     * @return [type]            [description]
+     * [makeIndex 解析主页]
+     * @Author   danier     cdking95@gmail.com
+     * @DateTime 2018-08-12
+     * @return   [type]
      */
-    private function makeViewFileName($file_conf)
+    public function makeIndex()
     {
-        // 静态文件存放基目录
-        $base_path = $this->public . DIRECTORY_SEPARATOR; 
-        // 解析文件名
-        $file_name = $file_conf['file_name'];
-        $file_type = substr(strrchr($file_name, '.'), 1);
-        $file_name = basename($file_name, '.'.$file_type);
-        // 时间解析
-        $date = empty($file_conf['date']) ? date('Y-m-d') : date('Y-m-d', strtotime($file_conf['date']));
-        $date_array = explode('-', $date);
-        $file_path = $base_path . $date_array[0] . DIRECTORY_SEPARATOR . $date_array[1] . DIRECTORY_SEPARATOR . $date_array[2] . DIRECTORY_SEPARATOR . $file_name . DIRECTORY_SEPARATOR . 'index.html';
-        return $file_path;
+        // 检查是否设置了主页
+        $file_path = $this->source_dir . $this->config['home_page'];
+        if ( !empty($this->config['home_page']) && file_exists($file_path) ) {
+            $html = $this->makeArticle(md5($file_path));
+        }else{
+            $file = [];
+            $file['articles_list'] = $this->index;
+            $file['web_title'] = $this->config['title'];  // 网站标题
+            $html = $this->render('index.tmp', $file);
+        }
+        return $html;
+    }
+
+    /**
+     * [makeArticle 解析文章]
+     * @Author   danier     cdking95@gmail.com
+     * @DateTime 2018-08-12
+     * @param    [type]     $page_uuid         [文章uuid]
+     * @return   [type]
+     */
+    public function makeArticle($page_uuid)
+    {
+        $file = $this->files[$page_uuid];
+        $file_data = File::getContent($file['file_path']);
+        $file['content'] = $this->markd2html->text( $file_data['content'] );
+        $file['articles_list'] = $this->index;
+        $html = $this->render('article.tmp', $file);
+        return $html;
     }
 
     /**
@@ -214,10 +222,9 @@ class Build
     {
         // @解析文件设置
         $this->sortByTime();
+        $html = $this->buildPage();
         $static_dir = str_replace($this->config['root'], '', $this->config['themes_dir']);
         $static_dir = str_replace('\\', '/', $static_dir);
-
-        $html = $this->buildPage();
         $html = str_replace('/static/', $static_dir.'/static/', $html);
         echo $html;
     }
@@ -231,29 +238,25 @@ class Build
         $path_info = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
         // 设置页面变量
         if ($path_info === '/') {
-            // 检查是否设置了主页
-            $home_page = $this->source_dir . $this->config['home_page'];
-            if ( !empty($this->config['home_page']) && file_exists($home_page) ) {
-                $file = $this->files[md5($home_page)];
-                $file_data = File::getContent($file['file_path']);
-                $Parsedown = new \Parsedown();
-                $file['content'] = $Parsedown->text( $file_data['content'] );
-                $file['articles_list'] = $this->index;
-            }else{
-                $file = [];
-                $file['articles_list'] = $this->index;
-                $file['web_title'] = $this->config['title'];  // 网站标题
-            }
-            $html = $this->render('index.tmp', $file);
+            $html = $this->makeIndex();
         }else{
             $path_info = substr($path_info, 1);
             $file_path = $this->source_dir . $path_info;
-            $file = $this->files[md5($file_path)];
-            $file_data = File::getContent($file['file_path']);
-            $Parsedown = new \Parsedown();
-            $file['content'] = $Parsedown->text($file_data['content']);
-            $file['articles_list'] = $this->index;
-            $html = $this->render('article.tmp', $file);
+            $param = $_REQUEST;
+            if ($param) {
+                $url = $param['url'];
+                // http://www.ccvda.cn/admin/login
+                $data = Curl::get($url);
+                $file = $this->files[md5($file_path)];
+                $file_data = File::getContent($file['file_path']);
+                $file['content'] = $this->markd2html->text( $file_data['content'] );
+                $file['response'] = $data;
+                $file['articles_list'] = $this->index;
+                $html = $this->render('api.tmp', $file);
+            }else{
+                $html = $this->makeArticle(md5($file_path));
+            }
+
         }
         return $html;
     }
