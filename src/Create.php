@@ -38,7 +38,7 @@ class Create
             $html .= "Create at ".date('Y-m-d H:i:s').PHP_EOL;
             $html .= 'You should edit this page as markdown'.PHP_EOL;
 
-            Log::info( 'Creating ' . $file );
+            // Log::info( 'Creating ' . $file );
             File::createFile($file, $html);
         } catch (Exception $e) {
             Log::info( 'Created ' . $file . ' failed!' );

@@ -124,6 +124,9 @@ class Build
     public function makeArticle($page_uuid)
     {
         $file = $this->files[$page_uuid];
+        if (empty($file)) {
+            return null;
+        }
         $file_data = File::getContent($file['file_path']);
         $file['content'] = $this->markd2html->text( $file_data['content'] );
         $file['articles_list'] = $this->index;
