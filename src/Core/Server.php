@@ -1,10 +1,11 @@
 <?php
-namespace Seeruo;
+namespace Seeruo\Core;
 
 use Exception;
-use \Seeruo\File;
-use \Seeruo\Cmd;
-use \Seeruo\Log;
+use \Seeruo\Core\File;
+use \Seeruo\Core\Cmd;
+use \Seeruo\Core\Log;
+
 /**
  * 开启本地服务器,用于预览博客，不能用于生产环境
  */

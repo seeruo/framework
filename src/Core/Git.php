@@ -1,6 +1,8 @@
 <?php
-namespace Lib;
+namespace Seeruo\Core;
+
 use Exception;
+
 /**
  * Git操作类
  */

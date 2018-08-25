@@ -1,9 +1,9 @@
 <?php
-namespace Seeruo;
+namespace Seeruo\Core;
 
 use Exception;
-use \Seeruo\Cmd;
-use \Seeruo\Log;
+use \Seeruo\Core\Cmd;
+use \Seeruo\Core\Log;
 
 /**
  * 推送镜头文件到服务器

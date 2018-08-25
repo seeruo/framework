@@ -1,8 +1,9 @@
 <?php
-namespace Seeruo;
+namespace Seeruo\Core;
 
 use Exception;
-use \Seeruo\Log;
+use \Seeruo\Core\Log;
+
 /**
  * 文件操作
  */
@@ -15,11 +16,12 @@ class File
      */
     static public function createFile($fileName, $content='')
     {
-        if (strstr(PHP_OS, 'WIN') && self::checkChar($fileName)) {
-            // $fileName = mb_convert_encoding($fileName, 'gb2312', 'utf-8');
-            $fileName = iconv('UTF-8', 'GB18030', $fileName);
+        $fileDirc = dirname($fileName);
+        $fileNameRc = $fileName;
+        if (strstr(PHP_OS, 'WIN')) {
+            $fileDirc   = mb_convert_encoding($fileDirc, 'gbk', 'UTF-8');
+            $fileNameRc = mb_convert_encoding($fileName, 'gbk', 'UTF-8');
         }
-        Log::debug($fileName);
         file_exists($fileDirc) || mkdir($fileDirc, 0777, true);
         $status = file_put_contents($fileNameRc, $content, LOCK_EX);
         if ($status === false) {
@@ -67,8 +69,6 @@ class File
         $content = isset($string[2]) ? $string[2] : ''; // 文章内容
 
         // 文章配置
-        // $config = yaml_parse($yaml);
-        // Log::debug($config);
         $config = explode("\n", trim($setting));
         $config = array_filter($config);
         foreach ($config as $key => &$v) {
@@ -115,21 +115,6 @@ class File
             }
             closedir($dir);
             return $tmp;
-        }
-    }
-    /**
-     * [checkChar description]
-     * @Author   Danier     Seeruo        [cdking95@gmail.com]
-     * @DateTime 2018-08-14
-     * @param    string     $str          [description]
-     * @return   [type]     [description]
-     */
-    static public function checkChar($str='')
-    {
-        if (preg_match("/[\x7f-\xff]/", $str)) {
-            return true;
-        } else {
-            return false;
         }
     }
 }

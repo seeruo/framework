@@ -1,6 +1,9 @@
 <?php
-namespace Seeruo;
+namespace Seeruo\Core;
+
 use Exception;
+use Seeruo\Core\Git;
+
 /**
  * Git操作类
  */
@@ -18,7 +21,7 @@ class Init
      */
     public function run()
     {
-        $Git = new \Seeruo\Git(RESULT, $this->config['logs']);
+        $Git = new Git(RESULT, $this->config['logs']);
         $Git->init();
     }
 }

@@ -1,7 +1,8 @@
 <?php
-namespace Seeruo;
+namespace Seeruo\Core;
 
 use Exception;
+
 /**
  * 日志
  */

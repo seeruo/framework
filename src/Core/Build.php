@@ -1,10 +1,10 @@
 <?php
-namespace Seeruo;
+namespace Seeruo\Core;
 
 use Exception;
-use \Seeruo\File;
-use \Seeruo\Log;
-use \Seeruo\Curl;
+use \Seeruo\Core\File;
+use \Seeruo\Core\Log;
+use \HyperDown\Parser;
 
 /**
  * Build
@@ -24,7 +24,8 @@ class Build
         $this->themes_dir = $config['themes_dir'].DIRECTORY_SEPARATOR;
         $this->public_dir = $config['public_dir'].DIRECTORY_SEPARATOR;
         $this->source_dir = $config['source_dir'].DIRECTORY_SEPARATOR;
-        $this->markd2html = new \Parsedown();
+        $this->markd2html = new Parser;
+        // Log::debug($this->markd2html);
     }
     /**
      * 构建静态网站所需文件
@@ -86,7 +87,6 @@ class Build
     {
         // 解析文件索引
         $site_title = $this->config['title'];
-        $Parsedown = new \Parsedown();
         foreach ($this->files as $key => $file) {
             $html = $this->makeArticle($file['page_uuid']);
             File::createFile($file['public_dir'], $html);
@@ -124,11 +124,8 @@ class Build
     public function makeArticle($page_uuid)
     {
         $file = $this->files[$page_uuid];
-        if (empty($file)) {
-            return null;
-        }
         $file_data = File::getContent($file['file_path']);
-        $file['content'] = $this->markd2html->text( $file_data['content'] );
+        $file['content'] = $this->markd2html->makeHtml( $file_data['content'] );
         $file['articles_list'] = $this->index;
         $html = $this->render('article.tmp', $file);
         return $html;
@@ -215,11 +212,14 @@ class Build
         return $html;
     }
 
-    /**********************************************************************************************************************
+    /************************************************************************************************************
      * 网页模式
-     **********************************************************************************************************************/
+     *********************************************************************************************************/
     /**
-     * 网页模式入口
+     * [web 网页模式入口]
+     * @Author   danier     cdking95@gmail.com
+     * @DateTime 2018-08-25
+     * @return   [type]
      */
     public function web()
     {
@@ -233,7 +233,10 @@ class Build
     }
 
     /**
-     * 构建主页静态文件
+     * [buildPage 构建主页静态文件]
+     * @Author   danier     cdking95@gmail.com
+     * @DateTime 2018-08-25
+     * @return   [type]
      */
     public function buildPage()
     {
@@ -246,14 +249,23 @@ class Build
             $path_info = substr($path_info, 1);
             $file_path = $this->source_dir . $path_info;
             $param = $_REQUEST;
-            if ($param) {
-                $url = $param['url'];
-                // http://www.ccvda.cn/admin/login
-                $data = Curl::get($url);
-                $file = $this->files[md5($file_path)];
+            if (isset($param['model']) && $param['model'] === 'api') {
+                $page_uuid = md5($file_path);
+                $file = $this->files[$page_uuid];
                 $file_data = File::getContent($file['file_path']);
-                $file['content'] = $this->markd2html->text( $file_data['content'] );
-                $file['response'] = $data;
+                // $file['content'] = $this->markd2html->makeHtml( $file_data['content'] );
+                // $param['file_data'] = $file_data;
+                if (isset($param['url'])) {
+                    $file['api_url'] = $param['url'];
+                }
+                if (isset($param['method'])) {
+                    $file['api_method'] = $param['method'];
+                }
+                if (isset($param['params'])) {
+                    $file['api_params'] = $param['params'];
+                }
+                $file['api_method'] = strtoupper($file['api_method']);
+                $file['content'] = \Seeruo\Core\HooksMan::run('PostMan', $file);
                 $file['articles_list'] = $this->index;
                 $html = $this->render('api.tmp', $file);
             }else{

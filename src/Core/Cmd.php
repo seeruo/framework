@@ -1,8 +1,9 @@
 <?php
-namespace Seeruo;
+namespace Seeruo\Core;
 
 use Exception;
-use \Seeruo\log;
+use \Seeruo\Core\log;
+
 /**
  * 命令行类库
  */
