@@ -10,97 +10,6 @@ use \Seeruo\Core\log;
 class Cmd
 {
     /**
-     * 接收的指令
-     * @var array
-     */
-    private static $options = [
-        ['com' => 'h',      'args' => false  ,'desc' => '帮助'],
-        ['com' => 'help',   'args' => false  ,'desc' => '-h'],
-        ['com' => 'init',   'args' => false  ,'desc' => '初始化仓库及博客结构'],
-        ['com' => 'b',      'args' => false  ,'desc' => '构建所有资源为静态html文件'],
-        ['com' => 'build',  'args' => false  ,'desc' => '-b'],
-        ['com' => 'c',      'args' => true   ,'desc' => '新建一片文章模板'],
-        ['com' => 'create', 'args' => true   ,'desc' => '-c'],
-        ['com' => 's',      'args' => false  ,'desc' => '创建本地服务器监听'],
-        ['com' => 'server', 'args' => false  ,'desc' => '-s'],
-        ['com' => 'd',      'args' => false  ,'desc' => '创建本地开发服务器'],
-        ['com' => 'develop', 'args' => false  ,'desc' => '-d'],
-        ['com' => 'p',      'args' => false  ,'desc' => '发布Blog,推送静态文件到服务器'],
-        ['com' => 'push',   'args' => false  ,'desc' => '-p'],
-    ];
-
-    /**
-     * 指令集
-     */
-    private static $command;
-
-    /**
-     * 解析参数
-     */
-    public static function parse()
-    {
-        $opt_str = '';
-        $opt_arr = [];
-        foreach (self::$options as $o) {
-            $command = $o['com'];
-            if (isset($o['args']) && $o['args'] === true) {
-                $command .= ':';
-            }
-            if (strlen($o['com']) == 1) {
-                $opt_str .= $command;
-            } else {
-                $opt_arr[] = $command;
-            }
-        }
-        self::$command = getopt($opt_str, $opt_arr);
-        // print_r(self::$command);die();
-    }
-    /**
-     * 检测指令是否正确
-     * @param  string  $com [指令]
-     * @return boolean      [是否有值]
-     */
-    public static function has($com='')
-    {
-        return isset(self::$command[$com]);
-    }
-    /**
-     * 获取指令的参数
-     * @param  [type]   $com [指令]
-     * @return [boolean]      [参数值]
-     */
-    public static function get($com)
-    {
-        if (isset(self::$command[$com]) && self::$command[$com]) {
-            return self::$command[$com];
-        }
-    }
-    /**
-     * 获取帮助
-     * @return [type] [description]
-     */
-    public static function help()
-    {
-        foreach (self::$options as $o) {
-            if (!isset($o['desc'])) {
-                continue;
-            }
-            $pre = '-';
-            $len = strlen($o['com']);
-            if (strlen($o['com']) > 1) {
-                $len++;
-                $pre .= '-';
-            }
-            $desc = $pre.$o['com'];
-
-            $desc .= str_repeat(' ', 15 - $len);
-            $desc .= $o['desc'];
-            
-            Log::info( $desc );
-        }
-    }
-
-    /**
      * [以system运行命令]
      * @param  [type] $cmd  [指令]
      * @param  string $desc [指令描述]
@@ -114,9 +23,6 @@ class Cmd
         $path = str_replace("\\","/\\", $path);
         $cmd = "cd ".$path." && ".$cmd;
         $last_line = system($cmd, $output);
-        if ($last_line === false) {
-            // Log::info( $output, 'error');
-        }
         Log::info("Process done!");
     }
     /**

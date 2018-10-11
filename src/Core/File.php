@@ -46,6 +46,7 @@ class File
      */
     static public function getContent($file_path)
     {
+        $file = []; // 文件解析完之后的数据
         $file_path = trim($file_path);
         // 初始配置
         $file_set = [
@@ -55,7 +56,7 @@ class File
             'title'     => '',
             'date'      => date('Y-m-d'),
             'tags'      => '',
-            'type'      => '分类',
+            'type'      => '',
             'author'    => '',
             'desc'      => '',
             'keywords'  => '',
@@ -69,9 +70,9 @@ class File
         $content = isset($string[2]) ? $string[2] : ''; // 文章内容
 
         // 文章配置
-        $config = explode("\n", trim($setting));
-        $config = array_filter($config);
-        foreach ($config as $key => &$v) {
+        $setting = explode("\n", trim($setting));
+        $setting = array_filter($setting);
+        foreach ($setting as $key => $v) {
             $s = explode(":", trim($v));
             $key = trim($s[0]);
             unset($s[0]);
@@ -80,7 +81,12 @@ class File
                 $file_set[$key] = $value;
             }
         }
-        $file = [];
+
+        // 处理文章标签
+        if (isset($file_set['tags'])) {
+            $file_set['tags'] = array_filter(explode(',', $file_set['tags']));
+        }
+
         $file['setting'] = $file_set;
         $file['content'] = $content;
         return $file;
@@ -95,6 +101,11 @@ class File
         if (empty($directory)) {
             Log::info( 'Miss folder path', 'error');
         }
+
+        if (substr($directory, -1, 1) === '/') {
+            $directory = substr($directory, 0, strlen($directory)-1);
+        }
+
         if($dir = opendir($directory)) {
             $tmp = Array();
             while($file = readdir($dir)) {

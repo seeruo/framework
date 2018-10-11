@@ -6,66 +6,131 @@ use \Seeruo\Core\File;
 use \Seeruo\Core\Cmd;
 use \Seeruo\Core\Log;
 
+
+// $server=new MyServer();
+// $server->listen();   //调用listen方法，使脚本处于监听状态
 /**
  * 开启本地服务器,用于预览博客，不能用于生产环境
+ * @socket 通信的整个过程
+ * @socket_create   //创建套接字
+ * @socket_bind     //绑定IP和端口
+ * @socket_listen   //监听相应端口
+ * @socket_accept   //接收请求
+ * @socket_read     //获取请求内容
+ * @socket_write    //返回数据
+ * @socket_close    //关闭连接
  */
-class Server 
+class Server
 {
-    private $config;
-    private $web_root;
-
+    private $ip;
+    private $port;
+    private $webroot;
+    //将常用的MIME类型保存在一个数组中
+    private $contentType=array(
+        ".html"=>"text/html",
+        ".htm"=>"text/html",
+        ".xhtml"=>"text/html",
+        ".xml"=>"text/html",
+        ".php"=>"text/html",
+        ".java"=>"text/html",
+        ".jsp"=>"text/html",
+        ".css"=>"text/css",
+        ".ico"=>"image/x-icon",
+        ".jpg"=>"application/x-jpg",
+        ".jpeg"=>"image/jpeg",
+        ".png"=>"application/x-png",
+        ".gif"=>"image/gif",
+        ".pdf"=>"application/pdf",
+        );
     public function __construct($config){
+        set_time_limit(0);
         $this->config = $config;
-        $this->app_root = $config['root'];
-        $this->web_root = $config['public_dir'];
+        $this->ip = $config['server_address'];
+        $this->port = $config['server_port'];
+        $this->webroot = $config['public_dir'];
+        echo "\nServer init sucess\n";
     }
+    public function listen(){
+        $socket=socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
+        if(!$socket)
+            echo "CREATE ERROR:".socket_strerror(socket_last_error()).'\n';
+        $bool = @socket_bind($socket,$this->ip,$this->port);
+        if(!$bool)
+            echo "BIND ERROR:".socket_strerror(socket_last_error()).'\n';
 
-    /**
-     * [预览]
-     * @return [type] [description]
-     */
-    public function preview()
-    {
-        try {
-            if ( $this->config['auto_open'] ) {
-                if (strstr(PHP_OS, 'WIN')) {
-                    $win_cmd = 'explorer http://'. $this->config['server_address'];
-                    Cmd::system($win_cmd, $this->config['root'], 'Open Explorer');
-                }else{
-                    $mac_cmd = 'open http://'. $this->config['server_address'];
-                    Cmd::system($mac_cmd, $this->config['root'], 'Open Explorer');
-                }
+        // 开启浏览器
+        if ( $this->config['auto_open'] ) {
+            if (strstr(PHP_OS, 'WIN')) {
+                $win_cmd = 'explorer http://'.$this->ip.':'.$this->port;
+                Cmd::system($win_cmd, $this->config['root'], 'Open Explorer');
+            }else{
+                $mac_cmd = 'open http://'.$this->ip.':'.$this->port;
+                Cmd::system($mac_cmd, $this->config['root'], 'Open Explorer');
             }
-            // 开启服务器
-            Log::info('请浏览器里预览生成的网站效果，地址：http://'.$this->config['server_address']);
-            $cmd = 'php -S ' . $this->config['server_address'] . ' -t ' . $this->web_root;
-            Cmd::system($cmd, $this->config['root'], 'Create One WebServer');
-        } catch (Exception $e) {
-            Log::info($e->getMessage());
+        }
+        Log::info('请浏览器里预览生成的网站效果，地址：http://'.$this->ip.':'.$this->port);
+
+        // 轮训监听
+        while(true){
+            $bool = socket_listen($socket);
+            if(!$bool){
+                echo "LISTEN ERROR:".socket_strerror(socket_last_error()).'\n';
+            }
+            $new_socket = socket_accept($socket);
+            if(!$new_socket){
+                echo "ACCPET ERROR:".socket_strerror(socket_last_error()).'\n';
+            }
+            $string = socket_read($new_socket, 20480);
+            $data = $this->request($string);
+            $num = @socket_write($new_socket,$data);
+            if($num == 0){
+                echo "WRITE ERROR:".socket_strerror(socket_last_error())."\n";
+            }else{
+                // echo "request already succeed\n";
+            }
+            @socket_close($new_socket);
         }
     }
     /**
-     * [开发]
-     * @return [type] [description]
+     * [读取get或post请求中的url，返回相应的文件]
+     * @param  [string]
+     * @return [string]
+     * http头
+     * method url protocols
      */
-    public function develop()
-    {
-        try {
-            if ( $this->config['auto_open'] ) {
-                if (strstr(PHP_OS, 'WIN')) {
-                    $win_cmd = 'explorer http://'. $this->config['server_address'];
-                    Cmd::system($win_cmd, $this->config['root'], 'Open Explorer');
-                }else{
-                    $mac_cmd = 'open http://'. $this->config['server_address'];
-                    Cmd::system($mac_cmd, $this->config['root'], 'Open Explorer');
-                }
-            }
-            // 开启服务器
-            Log::info('请浏览器里预览生成的网站效果，地址：http://'.$this->config['server_address']);
-            $cmd = 'php -S ' . $this->config['server_address'] . ' -t ' . $this->app_root;
-            Cmd::system($cmd, $this->config['root'], 'Create One WebServer');
-        } catch (Exception $e) {
-            Log::info($e->getMessage());
+    public function request($string){
+        // echo $string;
+        $pattern = "/\s+/";
+
+        $request = preg_split($pattern,$string);
+        if(count($request)<3){
+            return "request error\n";
+        }
+        $filename = $this->webroot.$request[1];
+        // 资源文件类型
+        $type = $this->setContentType($filename);
+        // 获取完整路径
+        if ($filename === substr($filename,strpos($filename,'.'))) {
+            $filename = '/'.implode('/', array_filter(explode('/', $filename))).'/index.html';
+        }
+        if(file_exists($filename)){
+            $data = file_get_contents($filename);
+            return $this->addHeader($request[2],200,"OK",$data,$type);
+        }else{
+            $data = "this resource is not exists";
+            return $this->addHeader($request[2],1000,"not exists",$data,$type);
+        }
+    }
+    private function addHeader($protocol,$state,$desc,$str,$type){
+         return "{$protocol} {$state} {$desc}\r\nContent-type:{$type}\r\n"."Content-Length:".
+            strlen($str)."\r\nServer:MyServer\r\n\r\n".$str;
+    }
+    private function setContentType($filename){
+        $type = substr($filename,strpos($filename,'.'));
+        if(isset($this->contentType[$type])){
+            return $this->contentType[$type];
+        }else{
+            return "text/html";
         }
     }
 }

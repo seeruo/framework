@@ -5,32 +5,71 @@
 	<meta author="">
 	<meta description="">
 	<meta keywords="">
-	<title>MY BLOG</title>
+	<title> SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
 </head>
 
 <body>
 	<main>
 		<div class="sibar">
-			<div class="logo">
-				<a href="/">MY BLOG</a>
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
 			</div>
-			<div class="all-list">
-		        <ul>
-		        		            <li><a href="/articles/2018/08.07/hello world/index.html">hello world</a></li>
-		        		            <li><a href="/articles/2018/08.12/测试/index.html">测试</a></li>
-		        		        </ul>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>坚持学习 Array_push(me,world)!</small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
 			</div>
 		</div>
 		<div class="content">
 			<div class="markdown-body">
-								    <div>
-						<h1>SeeRuo-PHP静态博客网站构建工具</h1>
-						<small>快速、简洁且高效的博客框架</small>
-						<p>这是主题模板里面自带的html主页, 你也可以在设置里面配置Markdown作为主页。</p>
-				    </div>
-							</div>
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+		
+		<h3><a name='什么是SeeRuo?' title='什么是SeeRuo?'></a>什么是SeeRuo?</h3><p>SeeRuo 是一个用命令行构建博客的工具，同时也是一个快速、简洁且高效的博客框架。 SeeRuo 使用 Markdown解析文章，在几秒内，即可利用靓丽的主题生成静态网页，并快速发布到服务器或github pages上。</p><h3><a name='SeeRuo 特色' title='SeeRuo 特色'></a>SeeRuo 特色</h3><ul><li>MarkDown语法</li><li>命令行构建</li><li>实时渲染</li><li>极简模版开发</li><li>快速发布到生产环境（服务器）</li></ul><h3><a name='安装前提' title='安装前提'></a>安装前提</h3><p>安装 SeeRuo 相当简单。然而在安装前，您必须检查电脑中是否已安装下列应用程序：</p><ul><li>Composer</li><li>PHP7(5.6以上都可以)</li><li>SSH</li></ul><p>如果您的电脑中已经安装上述必备程序，那么恭喜您！接下来只需要使用配置一些参数就可以开始使用了。<br>如果没有安装的，可以根据以下的提示进行安装.</p><h4><a name='PHP安装' title='PHP安装'></a>PHP安装</h4><ul><li>brew install php7</li><li>brew link --force php7</li></ul><h4><a name='SSH安装' title='SSH安装'></a>SSH安装</h4><p>正常情况下SSH是安装了的</p><ul><li>brew install ssh</li><li>brew link ssh</li></ul><h4><a name='Git安装' title='Git安装'></a>Git安装</h4><p>正常情况下Git是安装了的</p><ul><li>brew install git</li><li>brew link git</li></ul><h4><a name='安装SeeRuo' title='安装SeeRuo'></a>安装SeeRuo</h4>
+
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
 		</div>
 	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
 </body>
 </html>

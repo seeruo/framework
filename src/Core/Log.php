@@ -13,23 +13,18 @@ class Log
         if (strstr(PHP_OS, 'WIN')) {
             $desc = iconv('UTF-8', 'gb2312', $desc);
         }
-        echo '[info]: ' . $desc . PHP_EOL;
+        
         switch (strtoupper($type)) {
             case 'ERROR':
+                echo '[error]: ' . $desc . PHP_EOL;
                 exit();
                 break;
             case 'THROW':
                 throw new Exception($desc);
                 break;
             default:
+                echo '[info]: ' . $desc . PHP_EOL;
                 break;
         }
-    }
-
-    static public function debug($data)
-    {
-        echo "<pre>";
-        print_r($data);
-        die();
     }
 }

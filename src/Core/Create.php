@@ -25,6 +25,7 @@ class Create
     public function run($fileName)
     {
         try {
+            $fileName = getPy($fileName);
             $file = $this->source_dir . $fileName . ".md";
             if (file_exists($file)) {
                 throw new Exception("This file exists");
