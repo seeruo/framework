@@ -59,9 +59,9 @@ class Build
     public function __construct($config){
         $this->config = $config;
         $this->page_limit = 5;
-        $this->themes_dir = str_replace("\\","/\\", $config['themes_dir']);
-        $this->public_dir = str_replace("\\","/\\", $config['public_dir']);
-        $this->source_dir = str_replace("\\","/\\", $config['source_dir']);
+        $this->themes_dir = str_replace("\\","/", $config['themes_dir']);
+        $this->public_dir = str_replace("\\","/", $config['public_dir']);
+        $this->source_dir = str_replace("\\","/", $config['source_dir']);
         $this->markd2html = new Parser;
     }
     /**
@@ -105,12 +105,12 @@ class Build
     private function createStatic()
     {
         // 主题里面的静态文件
-        $files = File::getFiles($this->themes_dir . DIRECTORY_SEPARATOR . 'static');
+        $files = File::getFiles($this->themes_dir . '/static');
         // 文件拷贝
         array_walk($files, function ($file)
         {
-            $search_str = $this->themes_dir . DIRECTORY_SEPARATOR . 'static';
-            $replace_str = $this->public_dir . DIRECTORY_SEPARATOR . 'static';
+            $search_str = $this->themes_dir . '/static';
+            $replace_str = $this->public_dir . '/static';
             $to_path = str_replace($search_str, $replace_str, $file['file_path']);
             File::copyFolder($file['file_path'], $to_path);
         });
@@ -127,9 +127,9 @@ class Build
         if (isset($this->config['single_pages'])) {
             $themes = $this->config['single_pages'];
             foreach ($themes as $key => $v) {
-                $theme_page = $this->source_dir.DIRECTORY_SEPARATOR . $v;
+                $theme_page = $this->source_dir. '/' . $v;
                 if ( file_exists($theme_page) ) {
-                    $file_path = $this->public_dir . DIRECTORY_SEPARATOR . $key . '/index.html';
+                    $file_path = $this->public_dir . '/' . $key . '/index.html';
                     $html = $this->renderArticle(md5($theme_page), true);
                     File::createFile($file_path, $html);
                 }
@@ -165,7 +165,7 @@ class Build
                 // 'desc' => $file['description'],
             ];
         }
-        $file_path = $this->public_dir . DIRECTORY_SEPARATOR . 'articles/data.json';
+        $file_path = $this->public_dir . '/' . 'articles/data.json';
         $html = json_encode($search_data, JSON_UNESCAPED_UNICODE);
         File::createFile($file_path, $html);
     }
@@ -180,9 +180,9 @@ class Build
     {
         // 检查是否设置了主页
         $home_page = @$this->config['home_page'] ?: '';
-        if ( !empty($home_page) && file_exists($this->source_dir.DIRECTORY_SEPARATOR . $home_page) ) {
+        if ( !empty($home_page) && file_exists($this->source_dir. '/' . $home_page) ) {
             // 渲染html
-            $home_page = $this->source_dir.DIRECTORY_SEPARATOR . $home_page;
+            $home_page = $this->source_dir. '/' . $home_page;
             $html = $this->renderArticle(md5($home_page), true);
             // 创建文件
             $file_path = $this->public_dir . '/index.html';
@@ -215,7 +215,7 @@ class Build
                 // 处理路由
                 $path_key = array_filter(explode('-', $path_key));
                 $path = empty($path_key)? '' : implode('/', $path_key) . '/';
-                $file_path = $this->public_dir .DIRECTORY_SEPARATOR. $path .'index.html';
+                $file_path = $this->public_dir .'/'. $path .'index.html';
                 File::createFile($file_path, $html);
             }
         }
@@ -573,7 +573,7 @@ class Build
             // 处理文章分类
             if ( empty($file['type']) ) {
                 $file_type = str_replace($this->source_dir, '', $file['file_dire']);
-                $file_type = explode(DIRECTORY_SEPARATOR, trim($file_type));
+                $file_type = explode('/', trim($file_type));
             }else{
                 $file_type = explode(',', trim($file['type']));
             }
@@ -796,7 +796,7 @@ class Build
         }
         if (!empty($sg_pgs)) {
             array_walk($sg_pgs, function(&$d){
-                $d = md5($this->source_dir . DIRECTORY_SEPARATOR . $d);
+                $d = md5($this->source_dir . '/' . $d);
             });
         }
         $this->single_pages = $sg_pgs;
