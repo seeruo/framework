@@ -11,7 +11,7 @@ class HooksMan
     //声明私有构造方法为了防止外部代码使用new来创建对象。
     private function __construct($conf){
         // 初始钩子
-        $pluginList = scandir($conf['plugins_dir']);
+        $pluginList = scandir($conf['plugin_dir']);
         // 循环插件 // 排除. ..
         foreach ($pluginList as $k => $v) {
             if ($v=='.' || $v=='..') {
@@ -21,9 +21,9 @@ class HooksMan
         // 插件管理
         foreach ($pluginList as $k => $v) {
             // 获取配置项
-            $config = include_once($conf['plugins_dir']. DIRECTORY_SEPARATOR .$v.'/config.php');
+            $config = include_once($conf['plugin_dir']. DIRECTORY_SEPARATOR .$v.'/config.php');
             if ($config['status'] == 1) {
-                include_once($conf['plugins_dir']. DIRECTORY_SEPARATOR .$v.'/index.php');
+                include_once($conf['plugin_dir']. DIRECTORY_SEPARATOR .$v.'/index.php');
                 if (class_exists($v))
                 {
                     //初始化所有插件  

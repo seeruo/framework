@@ -35,3 +35,4 @@ SeeRuo 是一个用命令行构建博客的工具，同时也是一个快速、�
 - brew link git
 
 #### 安装SeeRuo
+test

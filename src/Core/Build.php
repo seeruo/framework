@@ -306,7 +306,7 @@ class Build
         $file['articles_file_index'] = $this->file_index;
         $file['articles_type_index'] = $this->type_index;
         $file['author'] = $file['author'] ?: $this->config['author'];
-        $file['href'] = $this->config['base_url'].$file['href'];
+        $file['href'] = $this->config['url'].$file['href'];
         $file['single_page'] = $single_page;
 
         // 类型分类需要字段
@@ -863,7 +863,7 @@ class Build
                 // 获取新key
                 $now_keys = $this->getFilesHashKey();
                 // 获取旧key
-                $old_keys = file_get_contents($this->config['root'].'/lock.key');
+                $old_keys = file_get_contents($this->config['config_root'].'/lock.key');
                 $old_keys = explode('-', $old_keys);
                 // 监测key值变化
                 $diff = array_diff($now_keys, $old_keys);
@@ -873,7 +873,7 @@ class Build
                     $files_key_str = implode('-', $now_keys);
                     // 执行渲染操作
                     $this->run();
-                    file_put_contents($this->config['root'].'/lock.key', $files_key_str);
+                    file_put_contents($this->config['config_root'].'/lock.key', $files_key_str);
                     Log::info('['.date('H:i:s').']文件渲染已经完成!');
                     Log::info('['.date('H:i:s').']文件监测程序运行中...');
                 }

@@ -51,44 +51,50 @@ class Server
         echo "\nServer init sucess\n";
     }
     public function listen(){
-        $socket=socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
-        if(!$socket)
-            echo "CREATE ERROR:".socket_strerror(socket_last_error()).'\n';
-        $bool = @socket_bind($socket,$this->ip,$this->port);
-        if(!$bool)
-            echo "BIND ERROR:".socket_strerror(socket_last_error()).'\n';
-
-        // 开启浏览器
-        if ( $this->config['auto_open'] ) {
-            if (strstr(PHP_OS, 'WIN')) {
-                $win_cmd = 'explorer http://'.$this->ip.':'.$this->port;
-                Cmd::system($win_cmd, $this->config['root'], 'Open Explorer');
-            }else{
-                $mac_cmd = 'open http://'.$this->ip.':'.$this->port;
-                Cmd::system($mac_cmd, $this->config['root'], 'Open Explorer');
+        try {
+            $socket=socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
+            if(!$socket){
+                throw new Exception("CREATE ERROR:".socket_strerror(socket_last_error()), 1);
             }
-        }
-        Log::info('请浏览器里预览生成的网站效果，地址：http://'.$this->ip.':'.$this->port);
-
-        // 轮训监听
-        while(true){
-            $bool = socket_listen($socket);
+            $bool = @socket_bind($socket,$this->ip,$this->port);
             if(!$bool){
-                echo "LISTEN ERROR:".socket_strerror(socket_last_error()).'\n';
+                throw new Exception("BIND ERROR:".socket_strerror(socket_last_error()), 1);
             }
-            $new_socket = socket_accept($socket);
-            if(!$new_socket){
-                echo "ACCPET ERROR:".socket_strerror(socket_last_error()).'\n';
+
+            // 开启浏览器
+            if ( $this->config['auto_open'] ) {
+                if (strstr(PHP_OS, 'WIN')) {
+                    $win_cmd = 'explorer http://'.$this->ip.':'.$this->port;
+                    Cmd::system($win_cmd, $this->config['root'], 'Open Explorer');
+                }else{
+                    $mac_cmd = 'open http://'.$this->ip.':'.$this->port;
+                    Cmd::system($mac_cmd, $this->config['root'], 'Open Explorer');
+                }
             }
-            $string = socket_read($new_socket, 20480);
-            $data = $this->request($string);
-            $num = @socket_write($new_socket,$data);
-            if($num == 0){
-                echo "WRITE ERROR:".socket_strerror(socket_last_error())."\n";
-            }else{
-                // echo "request already succeed\n";
+            Log::info('请浏览器里预览生成的网站效果，地址：http://'.$this->ip.':'.$this->port);
+
+            // 轮训监听
+            while(true){
+                $bool = socket_listen($socket);
+                if(!$bool){
+                    throw new Exception("LISTEN ERROR:".socket_strerror(socket_last_error()), 1);
+                }
+                $new_socket = socket_accept($socket);
+                if(!$new_socket){
+                    throw new Exception("ACCPET ERROR:".socket_strerror(socket_last_error()), 1);
+                }
+                $string = socket_read($new_socket, 20480);
+                $data = $this->request($string);
+                $num = @socket_write($new_socket,$data);
+                if($num == 0){
+                    throw new Exception("WRITE ERROR:".socket_strerror(socket_last_error()), 1);
+                }else{
+                    // echo "request already succeed\n";
+                }
+                @socket_close($new_socket);
             }
-            @socket_close($new_socket);
+        } catch (Exception $e) {
+            Log::info($e->getMessage(), 'error');
         }
     }
     /**
