@@ -102,10 +102,6 @@ class File
             Log::info( 'Miss folder path', 'error');
         }
 
-        if (substr($directory, -1, 1) === '/') {
-            $directory = substr($directory, 0, strlen($directory)-1);
-        }
-
         if($dir = opendir($directory)) {
             $tmp = Array();
             while($file = readdir($dir)) {

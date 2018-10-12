@@ -59,9 +59,9 @@ class Build
     public function __construct($config){
         $this->config = $config;
         $this->page_limit = 5;
-        $this->themes_dir = $config['themes_dir'];
-        $this->public_dir = $config['public_dir'];
-        $this->source_dir = $config['source_dir'];
+        $this->themes_dir = str_replace("\\","/\\", $config['themes_dir']);
+        $this->public_dir = str_replace("\\","/\\", $config['public_dir']);
+        $this->source_dir = str_replace("\\","/\\", $config['source_dir']);
         $this->markd2html = new Parser;
     }
     /**
@@ -574,30 +574,17 @@ class Build
             if ( empty($file['type']) ) {
                 $file_type = str_replace($this->source_dir, '', $file['file_dire']);
                 $file_type = explode(DIRECTORY_SEPARATOR, trim($file_type));
-                // foreach ($file_type as &$t) {
-                //     $t = trim($t);
-                // }
-                // $file['type'] = array_values(array_filter($file_type));
             }else{
                 $file_type = explode(',', trim($file['type']));
             }
+            // 去除空格
             foreach ($file_type as &$t) {
                 $t = trim($t);
             }
             $file['type'] = array_values(array_filter($file_type));
 
             $new_files[$file['page_uuid']] = $file;
-
-            /** 文章索引 ***********************/
-
-            // // 直接索引：一级索引
-            // $all_index[$file['page_uuid']] = [
-            //     'href'  => $file['href'],
-            //     'title' => $file['title'],
-            //     'uuid'  => $file['page_uuid'],
-            // ];
-            // 类型索引：后续处理多级索引
-            // $lvl_index[] = $file;
+            // dd($this->single_pages);
         }
         unset($key, $file);
         $this->files = $new_files;
