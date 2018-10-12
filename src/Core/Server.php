@@ -111,7 +111,11 @@ class Server
         $type = $this->setContentType($filename);
         // 获取完整路径
         if ($filename === substr($filename,strpos($filename,'.'))) {
-            $filename = '/'.implode('/', array_filter(explode('/', $filename))).'/index.html';
+            if (strstr(PHP_OS, 'WIN')) {
+                $filename = implode('/', array_filter(explode('/', $filename))).'/index.html';
+            }else{
+                $filename = '/'.implode('/', array_filter(explode('/', $filename))).'/index.html';
+            }
         }
         if(file_exists($filename)){
             $data = file_get_contents($filename);

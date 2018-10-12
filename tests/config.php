@@ -7,7 +7,7 @@ return [
     'push_user'         => 'root',              // SSH账号
     'push_address'      => '127.0.0.1',         // SSH推送地址
     'push_path'         => '/var/www/html',     // SSH服务器网站根路径,该路径需开启写权限
-    'themes'            => 'document',              // 网站主题
+    'themes'            => 'blog',              // 网站主题
     'auto_open'         => true,                // 自动打开浏览器
     // 扩展页码
     'home_page'         => '单页/home.md',       // 主页
