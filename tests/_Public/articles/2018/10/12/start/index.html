@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta author="">
+    <meta description="">
+    <meta keywords="">
+    <title> 快速开始 -  SeeRuo</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+    <main>
+        <div class="sibar">
+            <div class="logo">
+                <a href="/">SeeRuo</a>
+                <small>< 轻量化静态网站构建工具 ></small>
+            </div>
+            <div class="menu">
+                <ul class="mul" style="margin-left: 20px;">
+                                    <li><a href="/articles/2018/10/12/start"
+                         class="active"  >
+                        快速开始</a>
+                         
+                            <ul class="mul" style="margin-left: 30px;">
+                                                            <li><a style="font-size: 12px" onclick="goto(this)" class="cmenu" href="#版本开发计划">版本开发计划</a></li>
+                                                            <li><a style="font-size: 12px" onclick="goto(this)" class="cmenu" href="#安装seeruo">安装seeruo</a></li>
+                                                            <li><a style="font-size: 12px" onclick="goto(this)" class="cmenu" href="#快速开始">快速开始</a></li>
+                                                        </ul>
+                                            </li>
+                                    <li><a href="/articles/2018/08/07/hello-world"
+                         >
+                        你好，世界</a>
+                                            </li>
+                                </ul>
+            </div>
+            
+            <div class="links">
+                <a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+                <a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+                <a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+                <a><i class="fa fa-search" id="searchDiv"></i></a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="markdown-body">
+                <link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>快速开始</h2>
+		
+		<p>基于PHP开发的静态网站构建工具-Seeruo</p><h4><a name='版本开发计划' title='版本开发计划'></a>版本开发计划</h4><blockquote>1.0 稳定基础功能</blockquote><ul><li>创建文件，完成文章编辑</li><li>Markdown文件解析</li><li>本地预览文件</li><li>文章发布到生产环境(如：阿里云服务器)</li></ul><blockquote>2.0 （1.0版本存在的问题优化）</blockquote><ul><li>创建的中文文件，实现中文URL解析，及本地中文URL预览</li><li>实现Git上传到github page及其他类似的静态网页展示仓库</li><li>实现FTP上传虚拟空间的上传</li></ul><h4><a name='安装seeruo' title='安装seeruo'></a>安装seeruo</h4><pre><code class="language-shell">composer create-project seeruo/seeruo myblog</code></pre><h4><a name='快速开始' title='快速开始'></a>快速开始</h4><blockquote>开始使用之前要求：</blockquote><ul><li>PHP的环境变量已经配置</li><li>进入'myblog/App'目录</li></ul><blockquote>1.创建文件</blockquote><pre><code class="language-shell">php seeruo create 'filename' //不需要加文件后缀</code></pre><p>文件创建完成之后在App/Source可以查看，你可以选择你自己喜欢的编辑器去撰写文章</p><blockquote>2.开启服务（两种方式: start-实时构建静态文件, build-用于单次构建静态文件）</blockquote><pre><code class="language-shell">php seeruo start
+php seeruo build</code></pre><p>生成的静态文件存放在App/_Public里面,(_Public可以在配置文件里面自定义)</p><blockquote>3.本地调试</blockquote><pre><code class="language-shell">php seeruo server</code></pre><blockquote>4.发布到生产环境</blockquote><pre><code class="language-shell">php seeruo push</code></pre><p>注意：这里需要到seeruo里面去配置配置文件，配置内容如下</p><pre><code class="language-php">'push_type'         =&gt; 'ssh',               // 暂时只支持ssh方式，需要服务器开启的SSH支持
+'push_user'         =&gt; 'root',              // SSH账号
+'push_address'      =&gt; '127.0.0.1',         // SSH推送地址
+'push_path'         =&gt; '/var/www/html/blog',// SSH服务器网站根路径,该路径需开启写权限</code></pre>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: your name</li>
+				<li>本文链接: http://www.codegrids.com/articles/2018/10/12/start</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+    <script type="text/javascript" src="/static/srwords/srwords.js"></script>
+	<script type="text/javascript">
+		/**
+		 * [onload 页面加载完成之后，执行插件初始化]
+		 * @DateTime 2018-09-23
+		 * @return   {[type]}   [description]
+		 */
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords')
+		}
+	</script>
+</div>
+            </div>
+        </div>
+    </main>
+    <script src="/static/prism/prism.js"></script>
+    <script type="text/javascript">
+        function goto(e){
+            var c = document.querySelectorAll('.cmenu');
+            c.forEach(function(item,i){
+                item.classList.remove("cactive");
+            });
+            e.classList.add("cactive");
+        }
+        SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+    </script>
+</body>
+</html>
