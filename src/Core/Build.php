@@ -298,7 +298,7 @@ class Build
      */
     public function renderArticle($file_path, $single_page=false)
     {
-        $file_path = str_replace("\\","/\\", $file_path);
+        $file_path = str_replace("\\","/", $file_path);
         $page_uuid = md5($file_path);
         $file = $this->files[$page_uuid];
         $file_data = File::getContent($file['file_path']);
