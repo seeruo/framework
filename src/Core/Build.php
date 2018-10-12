@@ -59,9 +59,9 @@ class Build
     public function __construct($config){
         $this->config = $config;
         $this->page_limit = 5;
-        $this->themes_dir = str_replace("\\","/", $config['themes_dir']);
-        $this->public_dir = str_replace("\\","/", $config['public_dir']);
-        $this->source_dir = str_replace("\\","/", $config['source_dir']);
+        $this->themes_dir = $config['themes_dir'];
+        $this->public_dir = $config['public_dir'];
+        $this->source_dir = $config['source_dir'];
         $this->markd2html = new Parser;
     }
     /**
@@ -105,12 +105,12 @@ class Build
     private function createStatic()
     {
         // 主题里面的静态文件
-        $files = File::getFiles($this->themes_dir . '/static');
+        $files = File::getFiles($this->themes_dir . DIRECTORY_SEPARATOR . 'static');
         // 文件拷贝
         array_walk($files, function ($file)
         {
-            $search_str = $this->themes_dir . '/static';
-            $replace_str = $this->public_dir . '/static';
+            $search_str = $this->themes_dir . DIRECTORY_SEPARATOR . 'static';
+            $replace_str = $this->public_dir . DIRECTORY_SEPARATOR . 'static';
             $to_path = str_replace($search_str, $replace_str, $file['file_path']);
             File::copyFolder($file['file_path'], $to_path);
         });
@@ -127,10 +127,10 @@ class Build
         if (isset($this->config['single_pages'])) {
             $themes = $this->config['single_pages'];
             foreach ($themes as $key => $v) {
-                $theme_page = $this->source_dir. '/' . $v;
+                $theme_page = $this->source_dir.DIRECTORY_SEPARATOR . $v;
                 if ( file_exists($theme_page) ) {
-                    $file_path = $this->public_dir . '/' . $key . '/index.html';
-                    $html = $this->renderArticle(md5($theme_page), true);
+                    $file_path = $this->public_dir . DIRECTORY_SEPARATOR . $key . '/index.html';
+                    $html = $this->renderArticle($theme_page, true);
                     File::createFile($file_path, $html);
                 }
             }
@@ -165,7 +165,7 @@ class Build
                 // 'desc' => $file['description'],
             ];
         }
-        $file_path = $this->public_dir . '/' . 'articles/data.json';
+        $file_path = $this->public_dir . DIRECTORY_SEPARATOR . 'articles/data.json';
         $html = json_encode($search_data, JSON_UNESCAPED_UNICODE);
         File::createFile($file_path, $html);
     }
@@ -180,10 +180,10 @@ class Build
     {
         // 检查是否设置了主页
         $home_page = @$this->config['home_page'] ?: '';
-        if ( !empty($home_page) && file_exists($this->source_dir. '/' . $home_page) ) {
+        if ( !empty($home_page) && file_exists($this->source_dir.DIRECTORY_SEPARATOR . $home_page) ) {
             // 渲染html
-            $home_page = $this->source_dir. '/' . $home_page;
-            $html = $this->renderArticle(md5($home_page), true);
+            $home_page = $this->source_dir.DIRECTORY_SEPARATOR . $home_page;
+            $html = $this->renderArticle($home_page, true);
             // 创建文件
             $file_path = $this->public_dir . '/index.html';
             File::createFile($file_path, $html);
@@ -215,7 +215,7 @@ class Build
                 // 处理路由
                 $path_key = array_filter(explode('-', $path_key));
                 $path = empty($path_key)? '' : implode('/', $path_key) . '/';
-                $file_path = $this->public_dir .'/'. $path .'index.html';
+                $file_path = $this->public_dir .DIRECTORY_SEPARATOR. $path .'index.html';
                 File::createFile($file_path, $html);
             }
         }
@@ -284,20 +284,22 @@ class Build
             if (in_array($file['page_uuid'], $this->single_pages)) {
                 continue;
             }
-            $html = $this->renderArticle($file['page_uuid']);
+            $html = $this->renderArticle($file['file_path']);
             File::createFile($file['public_dir'], $html);
         }
     }
 
     /**
      * [renderArticle 解析文章静态页面]
-     * @Author   danier     cdking95@gmail.com
-     * @DateTime 2018-08-12
-     * @param    [type]     $page_uuid         [文章uuid]
-     * @return   [type]
+     * @DateTime 2018-10-12
+     * @param    [type]     $file_path   [文件路径]
+     * @param    boolean    $single_page [是否单页，用于通知全段]
+     * @return   [type]                  [description]
      */
-    public function renderArticle($page_uuid, $single_page=false)
+    public function renderArticle($file_path, $single_page=false)
     {
+        $file_path = str_replace("\\","/\\", $file_path);
+        $page_uuid = md5($file_path);
         $file = $this->files[$page_uuid];
         $file_data = File::getContent($file['file_path']);
         $file['content']             = $this->markd2html->makeHtml( $file_data['content'] );
@@ -573,7 +575,7 @@ class Build
             // 处理文章分类
             if ( empty($file['type']) ) {
                 $file_type = str_replace($this->source_dir, '', $file['file_dire']);
-                $file_type = explode('/', trim($file_type));
+                $file_type = explode(DIRECTORY_SEPARATOR, trim($file_type));
             }else{
                 $file_type = explode(',', trim($file['type']));
             }
@@ -796,7 +798,7 @@ class Build
         }
         if (!empty($sg_pgs)) {
             array_walk($sg_pgs, function(&$d){
-                $d = md5($this->source_dir . '/' . $d);
+                $d = md5($this->source_dir . DIRECTORY_SEPARATOR . $d);
             });
         }
         $this->single_pages = $sg_pgs;
