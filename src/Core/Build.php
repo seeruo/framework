@@ -568,14 +568,17 @@ class Build
             $file['href'] = '/articles/'.$date_arr[0].'/'.$date_arr[1].'/'.$date_arr[2].'/'.$file_name;
             $file['public_dir'] = $this->public_dir . $file['href'] . '/index.html';   // 文件生成路径
             $file['web_title'] = $this->config['title'];            // 网站标题
-            $file['page_uuid'] = md5($file['file_path']);
+            $file_path = str_replace('\\', '/', $file['file_path']);
+            $file['page_uuid'] = md5($file_path);
             $file['page_uuid_type'] = getpy($file['type'][0]);
             $file['page_uuid_type_now'] = getpy($this->getLastItem($file['type']));
 
             // 处理文章分类
             if ( empty($file['type']) ) {
-                $file_type = str_replace($this->source_dir, '', $file['file_dire']);
-                $file_type = explode(DIRECTORY_SEPARATOR, trim($file_type));
+                $source_dir = str_replace('\\', '/', $this->source_di);
+                $file_type = str_replace('\\', '/', $file['file_dire']);
+                $file_type = str_replace($source_dir, '', $file_type);
+                $file_type = explode('/', trim($file_type));
             }else{
                 $file_type = explode(',', trim($file['type']));
             }
