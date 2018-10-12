@@ -801,7 +801,8 @@ class Build
         }
         if (!empty($sg_pgs)) {
             array_walk($sg_pgs, function(&$d){
-                $d = md5($this->source_dir . DIRECTORY_SEPARATOR . $d);
+                $source_dir = str_replace('\\', '/', $this->source_dir);
+                $d = md5($source_dir . '/' . $d);
             });
         }
         $this->single_pages = $sg_pgs;
