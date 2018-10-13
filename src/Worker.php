@@ -28,6 +28,7 @@ class Worker
         'author'            => 'Danier(左浪)',               // 您的名字
         'url'               => 'http://www.example.com',    // 网站URL
         'themes'            => 'default',                   // 网站主题
+        'page_limit'        => 10,                          // 分页条数
 
         // 本地调试设置::必填
         'server_address'    => '127.0.0.1',                 // 本地服务器调试地址
@@ -40,6 +41,7 @@ class Worker
         'push_address'      => '127.0.0.1',                 // SSH推送地址
         'push_path'         => '/var/www/html/blog',        // SSH服务器网站根路径,该路径需开启写权限
         
+
         // ::选填
         'home_page'         => '',                          // 是否需要使用md文件作为主页 '单页/home.md'
         'single_pages'      => [                            // 单独解析的md文件，解析路径为 url/'你设置的链接'

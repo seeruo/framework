@@ -18,7 +18,7 @@ class Build
     /**
      * 分页条数
      */
-    private $page_limit = 10;
+    private $page_limit;
     /**
      * 模版文件路径
      */
@@ -58,7 +58,7 @@ class Build
      */
     public function __construct($config){
         $this->config = $config;
-        $this->page_limit = 5;
+        $this->page_limit = $config['page_limit'];
         $this->themes_dir = $config['themes_dir'];
         $this->public_dir = $config['public_dir'];
         $this->source_dir = $config['source_dir'];
@@ -70,6 +70,7 @@ class Build
     public function run()
     {
         try {
+            dd($this->page_limit);
             Log::info('Start build...');
             // @检查单页
             $this->checkSinglePages();

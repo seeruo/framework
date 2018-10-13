@@ -5,6 +5,7 @@ return [
     'author'            => 'Danier(左浪)',               // 您的名字
     'url'               => 'http://www.example.com',    // 网站URL
     'themes'            => 'default',                   // 网站主题
+    'page_limit'        => 5,                           // 分页条数
 
     // 本地调试设置::必填
     'server_address'    => '127.0.0.1',                 // 本地服务器调试地址
