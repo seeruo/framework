@@ -70,7 +70,6 @@ class Build
     public function run()
     {
         try {
-            dd($this->page_limit);
             Log::info('Start build...');
             // @检查单页
             $this->checkSinglePages();
