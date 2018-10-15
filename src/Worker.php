@@ -27,6 +27,7 @@ class Worker
         'title'             => 'SeeRuo',                    // 网站名称
         'author'            => 'Danier(左浪)',               // 您的名字
         'url'               => 'http://www.example.com',    // 网站URL
+        'license'           => '本博客所有文章除特别声明外，转载请注明出处！',
         'themes'            => 'default',                   // 网站主题
         'page_limit'        => 10,                          // 分页条数
 

@@ -1,4 +1,14 @@
 <?php
+/**
+ * This file is part of seeruo.
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the MIT-LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @author    Danier<cdking95@gmail.com>
+ */
+
 namespace Seeruo\Core;
 
 use Exception;
@@ -305,7 +315,10 @@ class Build
         $file['content']             = $this->markd2html->makeHtml( $file_data['content'] );
         $file['articles_file_index'] = $this->file_index;
         $file['articles_type_index'] = $this->type_index;
-        $file['author'] = $file['author'] ?: $this->config['author'];
+        $file['author'] = @$file['author'] ?: $this->config['author'];
+        $file['linker'] = @$file['linker'] ?: $file['href'];
+        $file['linker'] = $this->config['url'] . $file['linker'];
+        $file['license'] = @$file['license'] ?: $this->config['license'];
         $file['href'] = $this->config['url'].$file['href'];
         $file['single_page'] = $single_page;
 

@@ -1,4 +1,13 @@
 <?php
+/**
+ * This file is part of seeruo.
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the MIT-LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @author    Danier<cdking95@gmail.com>
+ */
 namespace Seeruo\Core;
 
 use Exception;
