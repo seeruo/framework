@@ -35,6 +35,20 @@ class Cmd
         Log::info("Process done!");
     }
     /**
+     * [以system运行命令]
+     * @param  [type] $cmd  [指令]
+     * @param  string $desc [指令描述]
+     * @param  [type] $path [执行路径]
+     * @return [type]       [description]
+     */
+    public static function system_r($cmd, $path)
+    {
+        $path = str_replace("\\","/\\", $path);
+        $cmd = "cd ".$path." && ".$cmd;
+        $last_line = system($cmd, $output);
+        return $output;
+    }
+    /**
      * [以proc_open运行命令]
      * @param  [type] $cmd  [指令]
      * @param  string $desc [指令描述]
@@ -48,7 +62,7 @@ class Cmd
            1 => array("pipe", "w"), 
            2 => array("pipe", "r")
         );
-        $process = proc_open(escapeshellarg($cmd), $descriptorspec, $pipes, $path, null); //run test_gen.php
+        $process = proc_open(escapeshellarg($cmd), $descriptorspec, $pipes, $path, null);
         Log::info($desc);
         if (is_resource($process))
         {

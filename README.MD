@@ -21,8 +21,18 @@
 - 安装Composer工具: 下载地址
 
 #### 安装seeruo
+创建一个新文件夹myblod,进入文件夹执行：
 ```language-shell
 composer require seeruo/framework
+```
+在文件夹下新建一个seeruo.php文件
+编辑文件内容如下：
+```language-php
+#!/d/php7/bin/php
+<?php
+require_once './vendor/autoload.php';
+$app = new \Seeruo\Worker(__DIR__);
+$app->run();
 ```
 
 #### 开始使用
@@ -32,10 +42,27 @@ php seeruo create 'filename' //不需要加文件后缀
 ```
 文件创建完成之后在App/Source可以查看，你可以选择你自己喜欢的编辑器去撰写文章
 
-> 2.开启服务（两种方式: start-实时构建静态文件, build-用于单次构建静态文件）
+> 2.构建静态文件
 ```language-shell
-php seeruo start
 php seeruo build
+```
+实时构建静态文件
+```language-shell
+php seeruo build -d
+```
+守护模式运行：(主要用在长期监听服务，例如服务器端自动构建)
+```language-shell
+[root@localhost test]# nohup php seeruo build -d nohup.out 2>&1 &
+[1] 73082
+[root@localhost test]# appending output to nohup.out
+```
+这里终端就可以关闭了
+关闭构建服务，需要查找进程号
+```language-shell
+[root@localhost test]# ps -ef|grep seeruo
+  501 73062 18588   0  4:10下午 ttys003    0:00.00 grep seeruo
+  501 73058 71173   0  4:10下午 ttys005    0:00.07 php seeruo build 2
+[root@localhost test]# kill 73058
 ```
 生成的静态文件存放在App/_Public里面,(_Public可以在配置文件里面自定义)
 
@@ -44,6 +71,7 @@ php seeruo build
 ```language-shell
 php seeruo server
 ```
+如果ctrl+C之后，端口号没有释放，请稍等几秒；等系统释放端口号
 
 > 4.发布到生产环境
 ```language-shell

@@ -52,7 +52,6 @@ class Git
     private function _cmd($cmd) {
         $path = str_replace("\\","/\\", $this->_path);
         $cmd = "cd ".$path." && ".$cmd;
-        // die($cmd);
         $last_line = system($cmd, $retval);
         if ($last_line === false) {
             $this->_writeLog( $retval );

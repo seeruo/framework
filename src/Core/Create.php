@@ -41,8 +41,8 @@ class Create
             }
             $html = '';
             $html .= "---" . PHP_EOL;
-            $html .= "type: " . 'type class' . PHP_EOL;
             $html .= "title: " . $fileName . PHP_EOL;
+            $html .= "type: " . 'type' . PHP_EOL;
             $html .= "date: " . date('Y-m-d H:i:s') . PHP_EOL;
             $html .= "tags: " . $fileName . PHP_EOL;
             $html .= "---" . PHP_EOL . PHP_EOL;

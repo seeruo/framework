@@ -5,6 +5,7 @@ use Exception;
 use \Seeruo\Core\Cmd;
 use \Seeruo\Core\Log;
 use \Seeruo\Core\Init;
+use \Seeruo\Core\Git;
 use \Seeruo\Core\Create;
 use \Seeruo\Core\Server;
 use \Seeruo\Core\Push;
@@ -103,11 +104,6 @@ class Worker
                 $Init = new Init($this->config);
                 $Init->run();
                 break;
-            // 开启调试模式
-            case 'start':
-                $Build = new Build($this->config);
-                $Build->listen();
-                break;
             // 创建一个markdown文件
             case 'create':
                 $fileName = @$argv[2] ?: '';
@@ -117,24 +113,46 @@ class Worker
                 $Create = new Create($this->config);
                 $Create->run($fileName);
                 break;
+            // 构建用于生产环境的静态网站文件
+            case 'build':
+                $Build = new Build($this->config);
+                $model = @$argv[2] ?: '';
+                if (trim($model) === '-d') {
+                    $Build->listen();
+                }else{
+                    $Build->run();
+                }
+                break;
             // 开启本地调试服务器
             case 'server':
                 $Server = new Server($this->config);
                 $Server->listen();
                 break;
-            // 构建用于生产环境的静态网站文件
-            case 'build':
-                $Build = new Build($this->config);
-                $Build->run();
-                break;
             // 上传至服务器
             case 'push':
-                // $model = @$argv[2] ?: '';
-                // if (empty($model)) {
-                //     Log::info( 'Command error.', 'error');
-                // }
-                $Push = new Push($this->config);
-                $Push->run();
+                $model = @$argv[2] ?: '';
+                if (empty($model)) {
+                    Log::info( 'Command error.', 'error');
+                }
+                $models = ['ssh','git'];
+                if (!in_array($model, $models)) {
+                    Log::info( 'model error', 'error');
+                }
+                switch ($model) {
+                    case 'ssh':
+                        $Push = new Push($this->config);
+                        $Push->run();
+                        break;
+                    case 'git':
+                        $this->config['logs'] = $this->config['root'].'/Logs/logs_git.log';
+                        $Git = new Git($this->config['public_dir'], $this->config['logs']);
+                        $Git->init();
+                        break;
+                    default:
+                        $Push = new Push($this->config);
+                        $Push->run();
+                        break;
+                }
                 break;
             // 命令帮助
             default:
@@ -142,7 +160,7 @@ class Worker
                 $usage.= "Usage: Commands [mode] \n\n";
                 $usage.= "Commands:\n";
                 $usage.= "init  \t\t\t 初始化本地环境.\n";
-                $usage.= "start \t\t\t 开启调试模式.\n";
+                $usage.= "watch \t\t\t 开启调试模式.\n";
                 $usage.= "create\t\t\t 创建一个markdown文件.\n";
                 $usage.= "\t'file_name'\t 文件名称(不需要文件后缀).\n";
                 $usage.= "server\t\t\t 开启一个本地调试服务器.\n";

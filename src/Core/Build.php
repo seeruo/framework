@@ -853,9 +853,13 @@ class Build
     public function getFilesHashKey()
     {
         $file_locker = [];
+        $config = $this->config['config_root'].'/config.php';
+        $file_config = [];
+        $file = @File::getContent($this->config['config_root'].'/config.php');
+        $file_config[] = $file['setting'];
         $files_source = File::getFiles($this->source_dir);
         $files_themes = File::getFiles($this->themes_dir);
-        $files = array_merge($files_source, $files_themes);
+        $files = array_merge($files_source, $files_themes, $file_config);
         foreach ($files as $file) {
             $file_locker[] = md5_file($file['file_path']);
         }
@@ -879,10 +883,12 @@ class Build
                 $old_keys = file_get_contents($this->config['config_root'].'/lock.key');
                 $old_keys = explode('-', $old_keys);
                 // 监测key值变化
-                $diff = array_diff($now_keys, $old_keys);
+                $diff_new = array_diff($now_keys, $old_keys);
+                $diff_old = array_diff($old_keys, $now_keys);
+                $diff = array_merge($diff_new, $diff_old);
                 // 如果有文件发生了修改删除，编辑
                 if (!empty($diff)) {
-                    Log::info('发现文件变动，开始执行渲染...');
+                    Log::info('['.date('H:i:s').']发现文件变动，开始执行渲染...');
                     $files_key_str = implode('-', $now_keys);
                     // 执行渲染操作
                     $this->run();
