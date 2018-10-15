@@ -108,7 +108,7 @@ class Worker
             case 'create':
                 $fileName = @$argv[2] ?: '';
                 if (empty($fileName)) {
-                    Log::info( 'Command error.', 'error');
+                    $fileName = 'file_'.date('Ymdhis');
                 }
                 $Create = new Create($this->config);
                 $Create->run($fileName);
@@ -160,13 +160,13 @@ class Worker
                 $usage.= "Usage: Commands [mode] \n\n";
                 $usage.= "Commands:\n";
                 $usage.= "init  \t\t\t 初始化本地环境.\n";
-                $usage.= "watch \t\t\t 开启调试模式.\n";
-                $usage.= "create\t\t\t 创建一个markdown文件.\n";
+                $usage.= "create\t\t\t 创建一个markdown文件（默认时间格式创建）.\n";
                 $usage.= "\t'file_name'\t 文件名称(不需要文件后缀).\n";
+                $usage.= "build \t\t\t 构建用于生产环境的静态网站文件(默认构建一次).\n";
+                $usage.= "\t-s  \t\t 实时构建.\n";
                 $usage.= "server\t\t\t 开启一个本地调试服务器.\n";
-                $usage.= "build \t\t\t 构建用于生产环境的静态网站文件.\n";
-                $usage.= "push  \t\t\t 上传文件到生产环境.\n";
-                $usage.= "\t-ftp \t\t 以sftp的方式上传文件.\n";
+                $usage.= "push  \t\t\t 上传文件到生产环境（默认ssh）.\n";
+                $usage.= "\t-ssh \t\t 以ssh的方式上传文件.\n";
                 $usage.= "\t-git \t\t 以git的方式上传文件.\n\n";
                 $usage.= "Use \"--help\" for more information about a command.\n";
                 $usage.= "===========================================================\n";
