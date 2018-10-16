@@ -30,7 +30,7 @@ class Push
      * [Git推送方式]
      * @return [type] [description]
      */
-    private function pushSsh()
+    public function pushSsh()
     {
     	if (!isset($this->config['ssh_user'])) {
             Log::info( 'SSH账户没有配置，请在Config.php文件参照如下方式配置：' );
