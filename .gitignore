@@ -1,5 +1,9 @@
-composer.phar
-/.DS_Store
 /vendor
+composer.phar
 composer.lock
 tests/Public/*
+.DS_Store
+Thumbs.db
+/phpunit.xml
+/.idea
+/.vscode
