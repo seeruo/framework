@@ -147,6 +147,7 @@ class Worker
                         break;
                     default:
                         break;
+                }
                 break;
             // 上传至服务器
             case 'git':
