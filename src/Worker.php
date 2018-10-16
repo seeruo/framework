@@ -4,6 +4,7 @@ namespace Seeruo;
 use Exception;
 use \Seeruo\Core\Cmd;
 use \Seeruo\Core\Log;
+use \Seeruo\Core\File;
 use \Seeruo\Core\Init;
 use \Seeruo\Core\Git;
 use \Seeruo\Core\Create;
@@ -24,7 +25,7 @@ class Worker
      * 初始配置
      */
     private $config = [
-        // 基础设置::必填
+        // 基础设置 :: 必填
         'title'             => 'SeeRuo',                    // 网站名称
         'author'            => 'Danier(左浪)',               // 您的名字
         'url'               => 'http://www.example.com',    // 网站URL
@@ -37,19 +38,25 @@ class Worker
         'server_port'       => '9001',                      // 本地服务器调试地址
         'auto_open'         => false,                       // 自动打开浏览器
 
-        // 发布到服务器空间::必填
-        'push_type'         => 'ssh',                       // 暂时只支持ssh方式，需要服务器开启的SSH支持
-        'push_user'         => 'root',                      // SSH账号
-        'push_address'      => '127.0.0.1',                 // SSH推送地址
-        'push_path'         => '/var/www/html/blog',        // SSH服务器网站根路径,该路径需开启写权限
+        // 发布到服务器空间 :: [云服务器] 上传必填
+        // 需要服务器开启的SSH支持
+        // 'ssh_type'          => 'ssh',                       // 
+        // 'ssh_user'          => 'root',                      // SSH账号
+        // 'ssh_address'       => '127.0.0.1',                 // SSH推送地址
+        // 'ssh_path'          => '/var/www/html/blog',        // SSH服务器网站根路径,该路径需开启写权限
         
+        // 发布到github page :: [git] 上传必填
+        // 需要github上添加"SSH keys",授权电脑免密操作
+        // 'git_address'       => 'git@github.com:seeruo/seeruo.github.io.git',  // 仓库地址
+        // 'git_log_file'      => 'git_log.log',    // git日志记录
 
-        // ::选填
-        'home_page'         => '',                          // 是否需要使用md文件作为主页 '单页/home.md'
-        'single_pages'      => [                            // 单独解析的md文件，解析路径为 url/'你设置的链接'
-            // 'about'             => '单页/about.md',          // 路径为 http://www.example.com/about
-            // 'linker'            => '单页/linker.md'          // 路径为 http://www.example.com/linker
-        ],    
+        // 单页配置 :: 选填
+        // 'home_page'         => '',                          // 是否需要使用md文件作为主页 '单页/home.md'
+        // 单独解析的md文件，解析路径为 url/'你设置的链接'
+        // 'single_pages'      => [   
+        //     'about'             => '单页/about.md',          // 路径为 http://www.example.com/about
+        //     'linker'            => '单页/linker.md'          // 路径为 http://www.example.com/linker
+        // ],    
     ];
 
     /**
@@ -77,12 +84,15 @@ class Worker
         $this->config['themes_dir'] = $this->config['root'].DIRECTORY_SEPARATOR.'Themes'.DIRECTORY_SEPARATOR.$this->config['themes'];
         $this->config['source_dir'] = $this->config['root'].DIRECTORY_SEPARATOR.'Source';
         $this->config['plugin_dir'] = $this->config['root'].DIRECTORY_SEPARATOR.'Plugins';
+        $this->config['logs_dir']   = $this->config['root'].DIRECTORY_SEPARATOR.'Logs';
+
 
         // 检查配置
         if (empty($this->config['root'])) {
             die('root:缺少值'.PHP_EOL);
         }
-
+        // 检查git日志文件释放配置
+        $this->config['git_log_file'] = $this->config['git_log_file'] ?? 'seeruo_git.log';
         // 初始钩子
         HooksMan::getinstance($this->config);
     }
@@ -101,8 +111,23 @@ class Worker
         switch ($command) {
             // 初始化本地环境
             case 'init':
-                $Init = new Init($this->config);
-                $Init->run();
+                // 删除文件目录
+                File::deleteDir($this->config['public_dir']);
+                // 创建空目录
+                File::addDir($this->config['public_dir']);
+                // 创建日志文件
+                $log_file = $this->config['logs_dir']. '/' . $this->config['git_log_file'];
+                if (!file_exists($log_file)) {
+                    File::createFile($log_file, 'Git日志文件');
+                }
+                // 拉取远程仓库
+                $Git = new Git($this->config);
+                $Git->init();
+                $Git->remote();
+                $Git->pull();
+                
+                // $Init = new Init($this->config);
+                // $Init->run();
                 break;
             // 创建一个markdown文件
             case 'create':
@@ -117,7 +142,7 @@ class Worker
             case 'build':
                 $Build = new Build($this->config);
                 $model = @$argv[2] ?: '';
-                if (trim($model) === '-d') {
+                if (trim($model) === '-s') {
                     $Build->listen();
                 }else{
                     $Build->run();
@@ -138,19 +163,15 @@ class Worker
                 if (!in_array($model, $models)) {
                     Log::info( 'model error', 'error');
                 }
+                $Push = new Push($this->config);
                 switch ($model) {
                     case 'ssh':
-                        $Push = new Push($this->config);
-                        $Push->run();
+                        $Push->pushSsh();
                         break;
                     case 'git':
-                        $this->config['logs'] = $this->config['root'].'/Logs/logs_git.log';
-                        $Git = new Git($this->config['public_dir'], $this->config['logs']);
-                        $Git->init();
+                        $Push->pushGit();
                         break;
                     default:
-                        $Push = new Push($this->config);
-                        $Push->run();
                         break;
                 }
                 break;

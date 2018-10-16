@@ -18,30 +18,44 @@ use Exception;
 class Git 
 {
 	private $_output; 			// 文件输出
+    private $_address;          // 仓库地址
 
-    public function __construct($path, $log){
-    	$this->_output = $log;
-    	$this->_path   = $path;
+    public function __construct($config){
+    	$this->_output = $config['logs_dir']. '/' . $config['git_log_file'];
+    	$this->_path   = $config['public_dir'];
+        $this->_address = $config['git_address'];
     }
     // 初始仓库
-    public function init($cmd='') {
-        $cmd = 'git init';
-        return $this->_cmd($cmd);
+    public function init() {
+        $this->_cmd( 'git init' );
     }
     // 初始仓库
-    public function Gclone($cmd='') {
-        $cmd = "git clone https://github.com/cdking95/cdking95.github.io.git";
-        return $this->_cmd( $cmd );
+    public function clone() {
+        $cmd = 'git clone ' . $this->_address;
+        $this->_cmd( $cmd );
+    }
+    public function remote()
+    {
+        $cmd = 'git remote add origin ' . $this->_address;
+        $this->_cmd( $cmd );
     }
     // 拉取代码
-    public function pull($cmd='') {
-        $cmd = "git pull https://github.com/cdking95/cdking95.github.io.git";
-        return $this->_cmd( $cmd );
+    public function pull() {
+        $cmd = 'git pull ' . $this->_address;
+        $this->_cmd( $cmd );
+    }
+    public function add()
+    {
+        $this->_cmd( 'git add .' );
+    }
+    public function commit($msg = 'seeruo文章提交')
+    {
+        $msg = 'git commit -m "'.$msg.'"';
+        $this->_cmd( $msg );
     }
     // 提交代码
-    public function push($cmd='') {
-        $cmd = "git push https://github.com/cdking95/cdking95.github.io.git";
-        return $this->_cmd( $cmd );
+    public function push() {
+        $this->_cmd( 'git push -u origin master' );
     }
     /*
      * 运行命令行
@@ -53,9 +67,7 @@ class Git
         $path = str_replace("\\","/\\", $this->_path);
         $cmd = "cd ".$path." && ".$cmd;
         $last_line = system($cmd, $retval);
-        if ($last_line === false) {
-            $this->_writeLog( $retval );
-        }
+        $this->_writeLog( $retval );
         return $last_line;
     }
     /**

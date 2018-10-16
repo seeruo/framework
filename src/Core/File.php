@@ -50,6 +50,39 @@ class File
         copy($path, $topath);
     }
     /**
+     * [deleteDir 删除目录]
+     * @DateTime 2018-10-16
+     * @param    [type]     $src [description]
+     * @return   [type]          [description]
+     */
+    static public function deleteDir($src) {
+        $dir = opendir($src);
+        if($dir) {
+            while(false !== ( $file = readdir($dir)) ) {
+                if (( $file != '.' ) && ( $file != '..' )) {
+                    $full = $src . '/' . $file;
+                    if ( is_dir($full) ) {
+                        self::deleteDir($full);
+                    }
+                    else {
+                        unlink($full);
+                    }
+                }
+            }
+            closedir($dir);
+            rmdir($src);
+        }
+    }
+    /**
+     * [addDir 新增目录]
+     * @DateTime 2018-10-16
+     * @param    [type]     $path [description]
+     */
+    static public function addDir($path, $p='0777', $s=true)
+    {
+        return mkdir($path);
+    }
+    /**
      * 获取文件内容
      * @param  [type] $fileName [文件名]
      */

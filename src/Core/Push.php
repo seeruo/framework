@@ -12,6 +12,7 @@ namespace Seeruo\Core;
 
 use Exception;
 use \Seeruo\Core\Cmd;
+use \Seeruo\Core\Git;
 use \Seeruo\Core\Log;
 
 /**
@@ -24,34 +25,6 @@ class Push
 
     public function __construct($config){
         $this->config = $config;
-        $this->web_root = $config['public_dir'].DIRECTORY_SEPARATOR;
-    }
-    /**
-     * [run description]
-     * @return [type] [description]
-     */
-    public function run()
-    {
-    	if (!isset($this->config['push_type'])) {
-            Log::info( '你没有配置推送方式，请在Config.php文件里面配置：' );
-            Log::info( '$config[\'push_type\']=\'git/ssh\';' );
-            Log::info( '$config[\'push_user\']=\'root\';' );
-            Log::info( '$config[\'push_address\']=\'127.0.0.1\';' );
-            Log::info( '$config[\'push_path\']=\'/usr/www/html\';' );
-            die();
-        }
-        switch ($this->config['push_type']) {
-            case 'git':
-                $this->pushGit();
-                break;
-            case 'ssh':
-                $this->pushSsh();
-                break;
-            default:
-                Log::info( '推送方式配置错误，请参照如下方式配置：' );
-                Log::info( '$config[\'push_type\']=\'git/ssh\'; //推送方式暂时只支持 git 和 ssh' );
-    			break;
-    	}
     }
     /**
      * [Git推送方式]
@@ -59,39 +32,46 @@ class Push
      */
     private function pushSsh()
     {
-    	if (!isset($this->config['push_user'])) {
+    	if (!isset($this->config['ssh_user'])) {
             Log::info( 'SSH账户没有配置，请在Config.php文件参照如下方式配置：' );
-            Log::info( '$config[\'push_user\']=\'root\';' );
+            Log::info( '$config[\'ssh_user\']=\'root\';' );
     		die();
     	}
-    	if (!isset($this->config['push_address'])) {
+    	if (!isset($this->config['ssh_address'])) {
     		Log::info( 'SSH地址没有配置，请在Config.php文件参照如下方式配置：' );
-    		Log::info( '$config[\'push_address\']=\'127.0.0.1\';' );
+    		Log::info( '$config[\'ssh_address\']=\'127.0.0.1\';' );
     		die();
     	}
-    	if (!isset($this->config['push_path'])) {
+    	if (!isset($this->config['ssh_path'])) {
     		Log::info( 'SSH路径没有配置，请在Config.php文件参照如下方式配置：' );
-    		Log::info( '$config[\'push_path\']=\'/usr/www/html\';' );
+    		Log::info( '$config[\'ssh_path\']=\'/usr/www/html\';' );
     		die();
     	}
 
+        $web_root = $this->config['public_dir'].DIRECTORY_SEPARATOR;
         if (strstr(PHP_OS, 'WIN')) {
-            $this->web_root = str_replace("\\","/", $this->web_root);
-            $this->web_root = iconv('UTF-8', 'gbk', $this->web_root);
+            $web_root = str_replace("\\","/", $web_root);
+            $web_root = iconv('UTF-8', 'gbk', $web_root);
         }
-    	$cmd = 'scp -r '. $this->web_root . '* ';
-    	$cmd .= $this->config['push_user'] . '@'.$this->config['push_address'] . ':';
-    	$cmd .= $this->config['push_path'];
-        // die($cmd);
-        Cmd::system($cmd, $this->web_root, 'Publish Web');
+    	$cmd = 'scp -r '. $web_root . '* ';
+    	$cmd .= $this->config['ssh_user'] . '@'.$this->config['ssh_address'] . ':';
+    	$cmd .= $this->config['ssh_path'];
+        Cmd::system($cmd, $web_root, 'Publish Web');
     }
     /**
      * [Git推送方式]
      * @return [type] [description]
      */
-    private function pushGit()
+    public function pushGit()
     {
-        Log::info( "开发中...!" );
+        if (!isset($this->config['git_address'])) {
+            Log::info('Git地址没有配置，请在Config.php文件参照如下方式配置：' );
+            Log::info('$config[\'git_address\']=\'git@github.com:seeruo/seeruo.github.io.git\';','error');
+        }
+        $Git = new Git($this->config);
+        $Git->add();
+        $Git->commit();
+        $Git->push();
     }
 }
 
