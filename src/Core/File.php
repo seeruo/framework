@@ -106,11 +106,11 @@ class File
         ];
         // 检查是否为md文件，不是的话不做后续解析
         $string = file_get_contents($file_path);
-        $string = explode("---\n", trim($string));
+        $string = explode("---", trim($string));
         $string = array_filter($string);
         $setting = isset($string[1]) ? $string[1] : ''; // 文章配置
         unset($string[0], $string[1]);
-        $content = implode($string, "---\n");
+        $content = implode($string, "---");
 
         // 文章配置
         $setting = explode("\n", trim($setting));
