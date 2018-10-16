@@ -109,26 +109,6 @@ class Worker
         // $command2 = isset($argv[2]) ? $argv[2] : '';
         // 解析指令
         switch ($command) {
-            // 初始化本地环境
-            case 'init':
-                // 删除文件目录
-                File::deleteDir($this->config['public_dir']);
-                // 创建空目录
-                File::addDir($this->config['public_dir']);
-                // 创建日志文件
-                $log_file = $this->config['logs_dir']. '/' . $this->config['git_log_file'];
-                if (!file_exists($log_file)) {
-                    File::createFile($log_file, 'Git日志文件');
-                }
-                // 拉取远程仓库
-                $Git = new Git($this->config);
-                $Git->init();
-                $Git->remote();
-                $Git->pull();
-                
-                // $Init = new Init($this->config);
-                // $Init->run();
-                break;
             // 创建一个markdown文件
             case 'create':
                 $fileName = @$argv[2] ?: '';
@@ -154,21 +134,49 @@ class Worker
                 $Server->listen();
                 break;
             // 上传至服务器
-            case 'push':
+            case 'ssh':
+                $models = ['init','push'];
                 $model = @$argv[2] ?: '';
-                if (empty($model)) {
+                if (empty($model) || !in_array($model, $models)) {
                     Log::info( 'Command error.', 'error');
-                }
-                $models = ['ssh','git'];
-                if (!in_array($model, $models)) {
-                    Log::info( 'model error', 'error');
                 }
                 $Push = new Push($this->config);
                 switch ($model) {
-                    case 'ssh':
+                    case 'push':
                         $Push->pushSsh();
                         break;
-                    case 'git':
+                    default:
+                        break;
+                break;
+            // 上传至服务器
+            case 'git':
+                $models = ['init','push'];
+                $model = @$argv[2] ?: '';
+                if (empty($model) || !in_array($model, $models)) {
+                    Log::info( 'Command error.', 'error');
+                }
+                $Push = new Push($this->config);
+                switch ($model) {
+                    case 'init':
+                        // 删除文件目录
+                        File::deleteDir($this->config['public_dir']);
+                        // 创建空目录
+                        File::addDir($this->config['public_dir']);
+                        // 创建日志文件
+                        $log_file = $this->config['logs_dir']. '/' . $this->config['git_log_file'];
+                        if (!file_exists($log_file)) {
+                            File::createFile($log_file, 'Git日志文件');
+                        }
+                        // 拉取远程仓库
+                        $Git = new Git($this->config);
+                        $Git->init();
+                        $Git->remote();
+                        $Git->pull();
+                        // 重新构建一次
+                        $Build = new Build($this->config);
+                        $Build->run();
+                        break;
+                    case 'push':
                         $Push->pushGit();
                         break;
                     default:
@@ -186,9 +194,11 @@ class Worker
                 $usage.= "build \t\t\t 构建用于生产环境的静态网站文件(默认构建一次).\n";
                 $usage.= "\t-s  \t\t 实时构建.\n";
                 $usage.= "server\t\t\t 开启一个本地调试服务器.\n";
-                $usage.= "push  \t\t\t 上传文件到生产环境（默认ssh）.\n";
-                $usage.= "\t-ssh \t\t 以ssh的方式上传文件.\n";
-                $usage.= "\t-git \t\t 以git的方式上传文件.\n\n";
+                $usage.= "git  \t\t\t 以git的方式上传文件.\n";
+                $usage.= "\tinit \t\t 以ssh的方式上传文件.\n";
+                $usage.= "\tpush \t\t 以git的方式上传文件.\n\n";
+                $usage.= "ssh  \t\t\t 以ssh的方式上传文件.\n";
+                $usage.= "\tpush \t\t 以git的方式上传文件.\n\n";
                 $usage.= "Use \"--help\" for more information about a command.\n";
                 $usage.= "===========================================================\n";
                 exit($usage);
