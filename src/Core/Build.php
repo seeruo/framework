@@ -859,13 +859,13 @@ class Build
     public function getFilesHashKey()
     {
         $file_locker = [];
-        $config = $this->config['config_root'].'/config.php';
-        $file_config = [];
-        $file = @File::getContent($this->config['config_root'].'/config.php');
-        $file_config[] = $file['setting'];
+        // $config = $this->config['config_root'].'/config.php';
+        // $file_config = [];
+        // $file = @File::getContent($this->config['config_root'].'/config.php');
+        // $file_config[] = $file['setting'];
         $files_source = File::getFiles($this->source_dir);
         $files_themes = File::getFiles($this->themes_dir);
-        $files = array_merge($files_source, $files_themes, $file_config);
+        $files = array_merge($files_source, $files_themes);
         foreach ($files as $file) {
             $file_locker[] = md5_file($file['file_path']);
         }
