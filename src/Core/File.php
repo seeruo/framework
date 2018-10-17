@@ -100,9 +100,8 @@ class File
             'tags'      => '',
             'type'      => '',
             'author'    => '',
-            'desc'      => '',
-            'keywords'  => '',
-            'from'      => '',
+            'linker'    => '',
+            'license'   => '',
         ];
         // 检查是否为md文件，不是的话不做后续解析
         $string = file_get_contents($file_path);

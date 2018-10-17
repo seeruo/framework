@@ -164,8 +164,8 @@ class Build
                 continue;
             }
             $full_content = File::getContent($file['file_path'])['content'];
-            $desc_content = mb_substr($full_content, 0, 1000, 'utf-8');
-            $file['description'] = $this->markd2html->makeHtml( $desc_content );
+            // $desc_content = mb_substr($full_content, 0, 1000, 'utf-8');
+            // $file['description'] = $this->markd2html->makeHtml( $desc_content );
             $search_data[] = [
                 'title' => $file['title'],
                 'href' => $file['href'],
@@ -264,7 +264,14 @@ class Build
         // 获取部分文件内容,用作缩略展示
         foreach ($rep as &$file) {
             $full_content = File::getContent($file['file_path'])['content'];
-            $desc_content = mb_substr($full_content, 0, 1000, 'utf-8');
+            $full_con_arr = explode("\n", trim($full_content));
+            // 获取20行作为摘要
+            $desc_content = [];
+            $length = (count($full_con_arr)>20) ? 20 : count($full_con_arr);
+            for ($i=0; $i < $length; $i++) { 
+                $desc_content[] = $full_con_arr[$i];
+            }
+            $desc_content = implode("\n", $desc_content);
             $file['description'] = $this->markd2html->makeHtml( $desc_content );
         }
         unset($file);
@@ -316,8 +323,7 @@ class Build
         $file['articles_file_index'] = $this->file_index;
         $file['articles_type_index'] = $this->type_index;
         $file['author'] = @$file['author'] ?: $this->config['author'];
-        $file['linker'] = @$file['linker'] ?: $file['href'];
-        $file['linker'] = $this->config['url'] . $file['linker'];
+        $file['linker'] = @$file['linker'] ?: ($this->config['url'] . $file['href']);
         $file['license'] = @$file['license'] ?: $this->config['license'];
         $file['href'] = $this->config['url'].$file['href'];
         $file['single_page'] = $single_page;
