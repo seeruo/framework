@@ -61,6 +61,30 @@ class Server
     }
     public function listen(){
         try {
+
+            // 由于考虑到部分用户没有开始socket扩展，索引，直接使用原生的调试服务器
+            if ( $this->config['auto_open'] ) {
+                if (strstr(PHP_OS, 'WIN')) {
+                    $win_cmd = 'explorer http://localhost:'.$this->port;
+                    Cmd::system($win_cmd, $this->config['root'], 'Open Explorer');
+                }else{
+                    $mac_cmd = 'open http://localhost:'.$this->port;
+                    Cmd::system($mac_cmd, $this->config['root'], 'Open Explorer');
+                }
+            }
+            // 开启服务器
+            Log::info('请浏览器里预览生成的网站效果，地址：http://localhost:'.$this->port);
+            $cmd = 'php -S ' . 'localhost:'.$this->port . ' -t ' . $this->webroot;
+            Cmd::system($cmd, $this->config['root'], 'Create One WebServer');
+            die();
+            // 由于考虑到部分用户没有开始socket扩展，索引，直接使用原生的调试服务器
+
+
+
+
+
+
+            
             $socket=socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
             if(!$socket){
                 throw new Exception("CREATE ERROR:".socket_strerror(socket_last_error()), 1);
