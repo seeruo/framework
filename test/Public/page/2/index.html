@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				                        <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/28/go-study-6" > Golang学习6（指针） </a>
+                        <span class="fa fa-clock-o"> 2018-10-28 </span>
+                    </h2>
+                    <section><p>Go 语言中使用指针可以更简单的执行一些任务.<br>我们都知道，变量是一种使用方便的占位符，用于引用计算机内存地址。<br>Go 语言的取地址符是 &，放到一个变量前使用就会返回相应变量的内存地址。</p><pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+   var a int = 10   
+
+   fmt.Printf(&quot;变量的地址: %x\n&quot;, &amp;a  )
+}</code></pre><p>执行结果</p><pre><code class="language-bash">变量的地址: 20818a220</code></pre><p>现在我们已经了解了什么是内存地址和如何去访问它。接下来我们将具体介绍指针。</p></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/28/go-study-5" > Golang学习5（数据结构） </a>
+                        <span class="fa fa-clock-o"> 2018-10-28 </span>
+                    </h2>
+                    <section><p>数据结构是程序开发中的基础，所以这点很重要</p><h3><a name='数组' title='数组'></a>数组</h3><p>Go 语言提供了数组类型的数据结构<br>数组是具有相同唯一类型的一组已编号且长度固定的数据项序列，这种类型可以是任意的原始类型例如整形、字符串或者自定义类型。</p><p>相对于去声明number0, number1, ..., and number99的变量，使用数组形式numbers[0], numbers[1] ..., numbers[99]更加方便且易于扩展。</p><p>数组元素可以通过索引（位置）来读取（或者修改），索引从0开始，第一个元素索引为 0，第二个索引为 1，以此类推。<br><img src="http://www.runoob.com/wp-content/uploads/2015/06/arrays.jpg" alt="数组" title="数组"></p><h4><a name='声明数组' title='声明数组'></a>声明数组</h4><p>Go 语言数组声明需要指定元素类型及元素个数，语法格式如下：</p><pre><code class="language-go">var variable_name [SIZE] variable_type</code></pre><p>以上为一维数组的定义方式。数组长度必须是整数且大于 0。</p><p>例如以下定义了数组 balance 长度为 10 类型为 float32：</p><pre><code class="language-go">var balance [10] float32</code></pre></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/28/go-study-4" > Golang学习4（函数） </a>
+                        <span class="fa fa-clock-o"> 2018-10-28 </span>
+                    </h2>
+                    <section><p>函数是基本的代码块，用于执行一个任务。</p><p>Go 语言最少有个 main() 函数。</p><p>你可以通过函数来划分不同功能，逻辑上每个函数执行的是指定的任务。</p><p>函数声明告诉了编译器函数的名称，返回类型，和参数。</p><p>Go 语言标准库提供了多种可动用的内置的函数。例如，len() 函数可以接受不同类型参数并返回该类型的长度。如果我们传入的是字符串则返回字符串的长度，如果传入的是数组，则返回数组中包含的元素个数。</p><h3><a name='函数定义' title='函数定义'></a>函数定义</h3><p>Go 语言函数定义格式如下：</p><pre><code class="language-go">func function_name( [parameter list] ) [return_types] {
+   函数体
+}</code></pre><p>函数定义解析：</p><ul><li>func：函数由 func 开始声明</li><li>function_name：函数名称，函数名和参数列表一起构成了函数签名。</li></ul></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/28/go-study-3" > Golang学习3（基础语法，变量、常量、运算符） </a>
+                        <span class="fa fa-clock-o"> 2018-10-28 </span>
+                    </h2>
+                    <section><p>了解一下，并不详细记录了，因为跟php大致上没有太大的区别，只记录一些golang的特性：</p><h3><a name='行分隔符' title='行分隔符'></a>行分隔符</h3><p>在 Go 程序中，一行代表一个语句结束。每个语句不需要像 C 家族中的其它语言一样以分号 ; 结尾，因为这些工作都将由 Go 编译器自动完成。</p><p>如果你打算将多个语句写在同一行，它们则必须使用 ; 人为区分，但在实际开发中我们并不鼓励这种做法。</p><p>以下为两个语句：</p><pre><code class="language-go">package main
+  
+import &quot;fmt&quot;
+
+func hello (){
+    /* 这里用的是换行的 */
+    fmt.Println(&quot;hello world!&quot;)
+    speak()
+    /* 这样写也是对的 */
+    fmt.Println(&quot;hello world!&quot;);speak()
+}</code></pre></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/28/go-study-2" > Golang学习2（hello world） </a>
+                        <span class="fa fa-clock-o"> 2018-10-28 </span>
+                    </h2>
+                    <section><p>继上一篇  Golang学习1（开发环境配置） 之后，<br>本章是just do it(从入门到放弃)</p><h3><a name='hello wold' title='hello wold'></a>hello wold</h3><p>创建一个项目目录，并新建一个go文件</p><pre><code class="language-bash">[~]# mkdir lesson2
+[~]# chmod -R 0777 lesson2
+[~]# cd lesson2
+[lesson2]# vim hello.go</code></pre><p>代码内容：</p><pre><code class="language-go">package main
+  
+import &quot;fmt&quot;
+</code></pre></section>
+                </blockquote>
+            </div>
+                <blockquote class="archives-one ">
+            <div><div class="pages"><a href="/">1</a><span class="current-page">2</span><a href="/page/3">3</a><a href="/page/4">4</a><a href="/page/5">5</a><a href="/page/6">6</a><a href="/page/7">7</a></div></div>
+        </blockquote>
+    			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

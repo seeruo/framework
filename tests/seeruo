@@ -1,5 +1,0 @@
-#!/d/php7/bin/php
-<?php
-require_once '../vendor/autoload.php';
-$app = new \Seeruo\Worker(__DIR__);
-$app->run();

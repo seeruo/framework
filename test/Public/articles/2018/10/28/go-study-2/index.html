@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> Golang学习2（hello world） -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>Golang学习2（hello world）</h2>
+		
+		<p>继上一篇  Golang学习1（开发环境配置） 之后，<br>本章是just do it(从入门到放弃)</p><h3><a name='hello wold' title='hello wold'></a>hello wold</h3><p>创建一个项目目录，并新建一个go文件</p><pre><code class="language-bash">[~]# mkdir lesson2
+[~]# chmod -R 0777 lesson2
+[~]# cd lesson2
+[lesson2]# vim hello.go</code></pre><p>代码内容：</p><pre><code class="language-go">package main
+  
+import &quot;fmt&quot;
+
+func main (){
+    fmt.Println(&quot;hello world!&quot;)
+}</code></pre><p>保存并执行</p><pre><code class="language-bash">[lesson2]# go run hello.go
+hello world!</code></pre><p>能够打印出"hello world"，说明你已经入门，下一步就是“放弃”；</p><h3><a name='PHP与Golang' title='PHP与Golang'></a>PHP与Golang</h3><p>PHP（外文名:PHP: Hypertext Preprocessor，中文名：“超文本预处理器”）是一种通用开源脚本语言。脚本语言不需要编译，可以直接用，由解释器来负责解释；一般都是以文本形式存在,类似于一种命令。由于代码是一句一句解释执行的，这中间有很多等待的过程，而且还取决于解释器的执行速度，所以解释型编程语言的特点就是运行速度慢。</p><p>Golang是一门编译型语言，它还需要经过一个编译的步骤，把写好的代码通过语言提供的编译器，编译成操作系统方便阅读而人类几乎无法阅读的代码。这种语言的好处就是，运行速度快。如：Go, Java, C/C++，都是编译型编程语言。</p><p>了解两者之间的区别之后，现在我们对go文件进行编译，然后再执行编译之后的文件试试；</p><pre><code class="language-bash">[lesson2]# go build hello.go
+[lesson2]# ls
+hello       hello.go
+[lesson2]# ./hello
+hello world!</code></pre><p>可以看见，我们得到了与run相同的结果</p><p>windows上编译之后的结果应该是hello.exe, 双击执行应该获取的效果也是一样的</p><h3><a name='关于main' title='关于main'></a>关于main</h3><blockquote>package main</blockquote><p>上面的demo中，我们使用了一行代码</p><pre><code class="language-go">package main</code></pre><p>如果我们把main改为hello，会造成什么后果呢?</p><pre><code class="language-go">package hello
+  
+import &quot;fmt&quot;
+
+func main (){
+    fmt.Println(&quot;hello world!&quot;)
+}</code></pre><p>执行go文件，看看有什么结果</p><pre><code class="language-bash">[lesson2]# go run hello.go
+go run: cannot run non-main package</code></pre><p>这里就会提示没有找到main包, Why？<br>这是Go语言规定，程序的入口文件，必须输入main包，</p><blockquote>func main</blockquote><p>再有我们在go文件中定义了一个main方法，那可以改为其他的方法吗？</p><pre><code class="language-go">package main
+  
+import &quot;fmt&quot;
+
+func hello (){
+    fmt.Println(&quot;hello world!&quot;)
+}</code></pre><p>执行go文件，看看有什么结果</p><pre><code class="language-bash">[lesson2]# go run hello.go
+# command-line-arguments
+runtime.main_main·f: relocation target main.main not defined
+runtime.main_main·f: undefined: &quot;main.main&quot;</code></pre><p>这里就会提示main没有定义, Why？<br>这是Go语言另一个语法规定，程序的入口文件，必须输入main包外，而且必须包含一个main方法<br>这些约定跟C语言的类似</p><blockquote>func 关键字 相当于php里面的function , 语法块与使用方法基本一致<br>例如我们在demo中再加入一个方法 speak</blockquote><pre><code class="language-go">package main
+  
+import &quot;fmt&quot;
+
+func hello (){
+    fmt.Println(&quot;hello world!&quot;)
+    speak()
+}
+func speak(){
+    fmt.Println(&quot;你好，我是Seeruo&quot;)
+}</code></pre><p>执行一下我们会得到如下返回</p><pre><code class="language-bash">[lesson2]# go run hello.go
+hello world!
+你好，我是Seeruo</code></pre><h3><a name='{ 是不能单独占一行的' title='{ 是不能单独占一行的'></a>{ 是不能单独占一行的</h3><p>如果有这种情况发生，就会报如下错误,这里是与php有区别的</p><pre><code class="language-bash">[lesson2]# go run hello.go
+# command-line-arguments
+./hello.go:5:6: missing function body
+./hello.go:6:1: syntax error: unexpected semicolon or newline before {</code></pre><p>到这里，我还没有放弃，继续下一章节</p>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: Danier(左浪)</li>
+				<li>本文链接: http://www.example.com/articles/2018/10/28/go-study-2</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

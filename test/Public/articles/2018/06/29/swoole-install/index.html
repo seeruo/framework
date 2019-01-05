@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> Linux下安装Swoole -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>Linux下安装Swoole</h2>
+		
+		<h4><a name='1.PHP安装请见PHP安装' title='1.PHP安装请见PHP安装'></a>1.PHP安装请见PHP安装</h4><h4><a name='2.C语言环境(4.4以上)' title='2.C语言环境(4.4以上)'></a>2.C语言环境(4.4以上)</h4><pre><code class="language-bash">[root@Mei ~]# yum install gcc</code></pre><h4><a name='3.安装make' title='3.安装make'></a>3.安装make</h4><pre><code class="language-bash">[root@Mei ~]# yum install make</code></pre><h4><a name='4.安装autoconf' title='4.安装autoconf'></a>4.安装autoconf</h4><pre><code class="language-bash">[root@Mei ~]# yum install autoconf</code></pre><h4><a name='5.安装pcre' title='5.安装pcre'></a>5.安装pcre</h4><pre><code class="language-bash">[root@Mei ~]# yum install pcre-devel</code></pre><p>下载Swoole:<br><a href="https://github.com/swoole/swoole-src/releases">https://github.com/swoole/swoole-src/releases</a><br><a href="http://pecl.php.net/package/swoole">http://pecl.php.net/package/swoole</a><br><a href="http://git.oschina.net/swoole/swoole">http://git.oschina.net/swoole/swoole</a><br>这三个地址都有swoole的版本</p><h4><a name='1.准备下载工具' title='1.准备下载工具'></a>1.准备下载工具</h4><pre><code class="language-bash">[root@Mei ~]# yum install wget
+[root@Mei ~]# wget -c http://pecl.php.net/get/swoole-2.1.3.tgz
+[root@Mei ~]# ls
+swoole-2.1.3.tgz</code></pre><h4><a name='2.安装解压工具并解压包文件' title='2.安装解压工具并解压包文件'></a>2.安装解压工具并解压包文件</h4><pre><code class="language-bash">[root@Mei ~]# yum install tar -y
+[root@Mei ~]# tar -zxvf swoole-2.1.3.tgz
+[root@Mei ~]# ls
+package.xml  swoole-2.1.3  swoole-2.1.3.tgz</code></pre><h4><a name='1.开始编译安装' title='1.开始编译安装'></a>1.开始编译安装</h4><pre><code class="language-bash">[root@Mei ~]# cd swoole-2.1.3
+[root@Mei swoole-2.1.3]# phpize
+Can't find PHP headers in /usr/include/php
+The php-devel package is required for use of this command.</code></pre><p>这里如果提示需要php-devel组件，请先先安装PHP的组件(参考PHP安装),再执行</p><pre><code class="language-bash">[root@Mei swoole-2.1.3]# ./configure
+[root@Mei swoole-2.1.3]# make
+[root@Mei swoole-2.1.3]# make install</code></pre><h4><a name='2.配置php.ini' title='2.配置php.ini'></a>2.配置php.ini</h4><pre><code class="language-bash">[root@Mei swoole-2.1.3]# vim /etc/php.ini</code></pre><p>在php.ini文件里面添加</p><pre><code class="language-bash">extension=swoole.so
+; If you wish to have an extension loaded automatically, use the following</code></pre><h4><a name='3.检查swoole安装是否成功' title='3.检查swoole安装是否成功'></a>3.检查swoole安装是否成功</h4><pre><code class="language-bash">[root@Mei swoole-2.1.3]# php -m
+----
+standard
+swoole
+tokenizer
+[Zend Modules]
+----</code></pre><p>如果存在 swoole, 则表示安装成功</p><p>THE END!!!</p>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: Danier(左浪)</li>
+				<li>本文链接: http://www.example.com/articles/2018/06/29/swoole-install</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

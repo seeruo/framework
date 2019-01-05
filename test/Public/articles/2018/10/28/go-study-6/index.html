@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> Golang学习6（指针） -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>Golang学习6（指针）</h2>
+		
+		<p>Go 语言中使用指针可以更简单的执行一些任务.<br>我们都知道，变量是一种使用方便的占位符，用于引用计算机内存地址。<br>Go 语言的取地址符是 &，放到一个变量前使用就会返回相应变量的内存地址。</p><pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+   var a int = 10   
+
+   fmt.Printf(&quot;变量的地址: %x\n&quot;, &amp;a  )
+}</code></pre><p>执行结果</p><pre><code class="language-bash">变量的地址: 20818a220</code></pre><p>现在我们已经了解了什么是内存地址和如何去访问它。接下来我们将具体介绍指针。</p><h3><a name='什么是指针' title='什么是指针'></a>什么是指针</h3><p>一个指针变量指向了一个值的内存地址。</p><p>类似于变量和常量，在使用指针前你需要声明指针。指针声明格式如下：</p><pre><code class="language-go">var var_name *var-type</code></pre><p>var-type 为指针类型，var_name 为指针变量名，* 号用于指定变量是作为一个指针。以下是有效的指针声明：</p><pre><code class="language-go">var ip *int        /* 指向整型*/
+var fp *float32    /* 指向浮点型 */
+本例中这是一个指向 int 和 float32 的指针。</code></pre><h3><a name='如何使用指针' title='如何使用指针'></a>如何使用指针</h3><p>指针使用流程：</p><ul><li>定义指针变量。</li><li>为指针变量赋值。</li><li>访问指针变量中指向地址的值。</li></ul><p>在指针类型前面加上 * 号（前缀）来获取指针所指向的内容。</p><pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+   var a int= 20   /* 声明实际变量 */
+   var ip *int        /* 声明指针变量 */
+
+   ip = &amp;a  /* 指针变量的存储地址 */
+
+   fmt.Printf(&quot;a 变量的地址是: %x\n&quot;, &amp;a  )
+
+   /* 指针变量的存储地址 */
+   fmt.Printf(&quot;ip 变量储存的指针地址: %x\n&quot;, ip )
+
+   /* 使用指针访问值 */
+   fmt.Printf(&quot;*ip 变量的值: %d\n&quot;, *ip )
+}</code></pre><p>执行结果</p><pre><code class="language-bash">a 变量的地址是: 20818a220
+ip 变量储存的指针地址: 20818a220
+*ip 变量的值: 20</code></pre><h3><a name='空指针' title='空指针'></a>空指针</h3><p>当一个指针被定义后没有分配到任何变量时，它的值为 nil。</p><p>nil 指针也称为空指针。</p><p>nil在概念上和其它语言的null、None、nil、NULL一样，都指代零值或空值。</p><p><strong>一个指针(pointer)变量通常缩写为 ptr</strong>。</p><p>查看以下实例：</p><pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+   var ptr *int
+
+   fmt.Printf(&quot;ptr 的值为 : %x\n&quot;, ptr  )
+}</code></pre><p>以上实例输出结果为：</p><pre><code class="language-bash">ptr 的值为 : 0</code></pre><p>空指针判断：</p><pre><code class="language-go">if(ptr != nil)     /* ptr 不是空指针 */
+if(ptr == nil)    /* ptr 是空指针 */</code></pre><h3><a name='指针数组' title='指针数组'></a>指针数组</h3><p>声明整型指针数组：</p><pre><code class="language-go">var ptr [MAX]*int;</code></pre><p>ptr 为整型指针数组。因此每个元素都指向了一个值。以下实例的三个整数将存储在指针数组中：</p><pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+const MAX int = 3
+
+func main() {
+   a := []int{10,100,200}
+   var i int
+   var ptr [MAX]*int;
+
+   for  i = 0; i &lt; MAX; i++ {
+      ptr[i] = &amp;a[i] /* 整数地址赋值给指针数组 */
+   }
+
+   for  i = 0; i &lt; MAX; i++ {
+      fmt.Printf(&quot;a[%d] = %d\n&quot;, i,*ptr[i] )
+   }
+}</code></pre><pre><code class="language-bash">a[0] = 10
+a[1] = 100
+a[2] = 200</code></pre><h3><a name='指向指针的指针' title='指向指针的指针'></a>指向指针的指针</h3><p>如果一个<strong>指针变量</strong>存放的又是<strong>另一个指针变量的地址</strong>，则称这个<strong>指针变量</strong>为<strong>指向指针的指针变量</strong>。</p><p>当定义一个指向指针的指针变量时，<strong>第一个指针存放第二个指针的地址，第二个指针存放变量的地址</strong>：<br><img src="http://www.runoob.com/wp-content/uploads/2015/06/pointer_to_pointer.jpg" alt="指针1" title="指针1"><br>指向指针的指针变量声明格式如下</p><pre><code class="language-go">var ptr **int;</code></pre><p>以上指向指针的指针变量为整型。</p><p><strong>访问指向指针的指针变量值需要使用两个 * 号</strong>，如下所示：</p><pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+
+   var a int
+   var ptr *int
+   var pptr **int
+
+   a = 3000
+
+   /* 指针 ptr 地址 */
+   ptr = &amp;a
+
+   /* 指向指针 ptr 地址 */
+   pptr = &amp;ptr
+
+   /* 获取 pptr 的值 */
+   fmt.Printf(&quot;变量 a = %d\n&quot;, a )
+   fmt.Printf(&quot;指针变量 *ptr = %d\n&quot;, *ptr )
+   fmt.Printf(&quot;指向指针的指针变量 **pptr = %d\n&quot;, **pptr)
+}</code></pre><p>执行结果：</p><pre><code class="language-bash">变量 a = 3000
+指针变量 *ptr = 3000
+指向指针的指针变量 **pptr = 3000</code></pre><h3><a name='指针作为函数参数' title='指针作为函数参数'></a>指针作为函数参数</h3><p>Go 语言允许向函数传递指针，只需要在函数定义的参数上设置为指针类型即可。</p><p>以下实例演示了如何向函数传递指针，并在函数调用后修改函数内的值，：</p><pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+   /* 定义局部变量 */
+   var a int = 100
+   var b int= 200
+
+   fmt.Printf(&quot;交换前 a 的值 : %d\n&quot;, a )
+   fmt.Printf(&quot;交换前 b 的值 : %d\n&quot;, b )
+
+   /* 调用函数用于交换值
+   * &amp;a 指向 a 变量的地址
+   * &amp;b 指向 b 变量的地址
+   */
+   swap(&amp;a, &amp;b);
+
+   fmt.Printf(&quot;交换后 a 的值 : %d\n&quot;, a )
+   fmt.Printf(&quot;交换后 b 的值 : %d\n&quot;, b )
+}
+// 因为函数体内不能修改局部变量，所以可以修改指针指向的地址
+func swap(x *int, y *int) {
+   var temp int
+   temp = *x    /* 保存 x 地址的值 */
+   *x = *y      /* 将 y 赋值给 x */
+   *y = temp    /* 将 temp 赋值给 y */
+}</code></pre><p>以上实例允许输出结果为：</p><pre><code class="language-bash">交换前 a 的值 : 100
+交换前 b 的值 : 200
+交换后 a 的值 : 200
+交换后 b 的值 : 100</code></pre><p>更简单的交换函数</p><pre><code class="language-go">func swap(x *int, y *int){
+    *x, *y = *y, *x
+}</code></pre>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: Danier(左浪)</li>
+				<li>本文链接: http://www.example.com/articles/2018/10/28/go-study-6</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

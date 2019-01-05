@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> Linux下安装Sambar -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>Linux下安装Sambar</h2>
+		
+		<p>注意：一定要关闭SELINUX</p><h3><a name='防火墙端口开放' title='防火墙端口开放'></a>防火墙端口开放</h3><pre><code class="language-bash">[root@base ~]# vim /etc/sysconfig/iptables
+-A INPUT -p udp -m state --state NEW -m udp --dport 137 -j ACCEPT
+-A INPUT -p udp -m state --state NEW -m udp --dport 138 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 139 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 389 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 445 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 901 -j ACCEPT
+
+[root@base ~]# yum -y install samba samba-client</code></pre><h3><a name='设置开机启动' title='设置开机启动'></a>设置开机启动</h3><pre><code class="language-bash">[root@base ~]# systemctl enable smb</code></pre><p>备份原始配置，并配置新配置文件</p><pre><code class="language-bash">[root@base ~]# cd /etc/samba/ 
+[root@base samba]# cp smb.conf smb.conf_bak
+[root@base samba]# vim smb.conf</code></pre><h3><a name='详细配置' title='详细配置'></a>详细配置</h3><pre><code class="language-bash">[global]
+    workgroup = WORKGROUP
+    server string = Ted Samba Server %v
+    netbios name = TedSamba
+    passdb backend = tdbsam
+    security = user
+    map to guest = Bad User
+[webservices]
+    comment = share Directories
+    path = /smb/webservices
+    writable = yes
+    public = yes</code></pre><pre><code class="language-bash">[root@localhost /]# groupadd samba
+[root@localhost /]# useradd smbuser -g samba -s /sbin/nologin
+[root@localhost /]# smbpasswd -a smbuser
+[root@localhost /]# mkdir -m 0777 /devshare
+[root@localhost /]# chown -R smbuser:samba /devshare
+[root@localhost /]# vim /etc/samba/smb.conf</code></pre><pre><code class="language-bash">[devShare]
+    comment = dev file
+    path = /devshare
+    valid = smbuser
+    write list = smbuser
+    create mask = 0777
+    directory mask = 0777</code></pre><p>启动smb</p><pre><code class="language-bash">[root@base ~]# systemctl restart smb</code></pre><p>本地测试</p><pre><code class="language-bash">[root@base ~]# smbclient -L 127.0.0.1 -u smbuser</code></pre><h3><a name='指定新建目录的属性' title='指定新建目录的属性'></a>指定新建目录的属性</h3><pre><code class="language-bash">directory mask =0777
+force directorymode = 0777
+directorysecurity mask = 0777
+force directorysecurity mode = 0777</code></pre><h3><a name='指定新建文件的属性' title='指定新建文件的属性'></a>指定新建文件的属性</h3><pre><code class="language-bash">create mask =0777　
+force createmode = 0777
+security mask =0777
+force securitymode = 0777</code></pre>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: Danier(左浪)</li>
+				<li>本文链接: http://www.example.com/articles/2016/08/29/sambar-install</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

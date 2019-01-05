@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				                        <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/28/go-study-1" > Golang学习1（开发环境配置） </a>
+                        <span class="fa fa-clock-o"> 2018-10-28 </span>
+                    </h2>
+                    <section><p>Mac下安装golang</p><pre><code class="language-bash">[~] brew install go@1.9
+==&gt; Downloading https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles/go@1.9-1.9.7
+######################################################################## 100.0%
+==&gt; Pouring go@1.9-1.9.7.mojave.bottle.tar.gz
+==&gt; Caveats
+A valid GOPATH is required to use the `go get` command.
+If $GOPATH is not specified, $HOME/go will be used by default:
+  https://golang.org/doc/code.html#GOPATH
+
+You may wish to add the GOROOT-based install location to your PATH:
+  export PATH=$PATH:/usr/local/opt/go@1.9/libexec/bin
+
+go@1.9 is keg-only, which means it was not symlinked into /usr/local,
+because this is an alternate version of another formula.
+
+If you need to have go@1.9 first in your PATH run:</code></pre></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/25/php-ylzr" > PHP依赖注入及使用反射类创建容器 </a>
+                        <span class="fa fa-clock-o"> 2018-10-25 </span>
+                    </h2>
+                    <section><h3><a name='依赖注入' title='依赖注入'></a>依赖注入</h3><p>直接看代码，理解依赖注入的特性</p><pre><code class="language-php">&lt;?php
+class C
+{
+    public function doSomething()
+    {
+        echo __METHOD__, '我是C类|';
+    }
+}
+
+/**
+ * B依赖C
+ */
+class B
+{
+    private $c;
+</code></pre></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/24/php-note" > PHP基础知识梳理 </a>
+                        <span class="fa fa-clock-o"> 2018-10-24 </span>
+                    </h2>
+                    <section><pre><code class="language-php">namespace App;
+
+use App\Base;
+use Closure;
+
+class People extends Base {
+    public $args;
+    public function __construct(Int $args){
+        echo $args . &quot;\n&quot;;
+        $this-&gt;args = $args;
+        $this-&gt;init();
+    }
+    public function init(){
+        echo 'init' . &quot;\n&quot;;
+    }
+    public function say(String $arg){
+        echo $arg . &quot;\n&quot;;
+    }</code></pre></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/09/gearman-study" > PHP使用gearman进行任务分发 </a>
+                        <span class="fa fa-clock-o"> 2018-10-09 </span>
+                    </h2>
+                    <section><p>Gearman是一个分发任务的程序框架，可以用在各种场合，与Hadoop相比，Gearman更偏向于任务分发功能。<br>它的任务分布非常简单，简单得可以只需要用脚本即可完成。<br>Gearman最初用于LiveJournal的图片resize功能，由于图片resize需要消耗大量计算资源，因此需要调度到后端多台服务器执行，完成任务之后返回前端再呈现到界面。</p><h3><a name='Gearman可以做什么' title='Gearman可以做什么'></a>Gearman可以做什么</h3><p>异步处理:图片处理,订单处理,批量邮件/通知之类的<br>要求高CPU或内存的处理:大容量的数据处理,MapReduce运算,日志聚集,视频编码<br>分布式和并行的处理<br>定时处理:增量更新,数据复制<br>限制速率的FIFO处理<br>分布式的系统监控任务</p><p>gearman中请求的处理过程一般涉及三种角色：client-&gt;job-&gt;worker</p><blockquote>client：是请求的发起者<br>job：是请求的调度者，用于把客户的请求分发到不同的worker上进行工作<br>worker：是请求的处理者</blockquote><p><a href="http://gearman.org/getting-started/">Gearman官方手册</a></p><h3><a name='安装' title='安装'></a>安装</h3></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/07/mysql-spend-up" > MySQL性能优化的20+条经验 </a>
+                        <span class="fa fa-clock-o"> 2018-10-07 </span>
+                    </h2>
+                    <section><p>今天，数据库的操作越来越成为整个应用的性能瓶颈了，这点对于Web应用尤其明显。关于数据库的性能，这并不只是DBA才需要担心的事，而这更是我们程序员需要去关注的事情。当我们去设计数据库表结构，对操作数据库时（尤其是查表时的SQL语句），我们都需要注意数据操作的性能。这里，我们不会讲过多的SQL语句的优化，而只是针对MySQL这一Web应用最多的数据库。希望下面的这些优化技巧对你有用。</p><h4><a name='1. 为查询缓存优化你的查询' title='1. 为查询缓存优化你的查询'></a>1. 为查询缓存优化你的查询</h4><p>大多数的MySQL服务器都开启了查询缓存。这是提高性最有效的方法之一，而且这是被MySQL的数据库引擎处理的。当有很多相同的查询被执行了多次的时候，这些查询结果会被放到一个缓存中，这样，后续的相同的查询就不用操作表而直接访问缓存结果了。</p><p>这里最主要的问题是，对于程序员来说，这个事情是很容易被忽略的。因为，我们某些查询语句会让MySQL不使用缓存。请看下面的示例：</p><pre><code class="language-php">// 查询缓存不开启 
+$r = mysql_query(&quot;SELECT username FROM user WHERE signup_date &gt;= CURDATE()&quot;); 
+
+// 开启查询缓存 
+$today = date(&quot;Y-m-d&quot;); 
+$r = mysql_query(&quot;SELECT username FROM user WHERE signup_date &gt;= '$today'&quot;); </code></pre><p>上面两条SQL语句的差别就是 CURDATE() ，MySQL的查询缓存对这个函数不起作用。所以，像 NOW() 和 RAND() 或是其它的诸如此类的SQL函数都不会开启查询缓存，因为这些函数的返回是会不定的易变的。所以，你所需要的就是用一个变量来代替MySQL的函数，从而开启缓存。</p><h4><a name='2. EXPLAIN 你的 SELECT 查询' title='2. EXPLAIN 你的 SELECT 查询'></a>2. EXPLAIN 你的 SELECT 查询</h4><p>使用 EXPLAIN 关键字可以让你知道MySQL是如何处理你的SQL语句的。这可以帮你分析你的查询语句或是表结构的性能瓶颈。</p></section>
+                </blockquote>
+            </div>
+                <blockquote class="archives-one ">
+            <div><div class="pages"><a href="/">1</a><a href="/page/2">2</a><span class="current-page">3</span><a href="/page/4">4</a><a href="/page/5">5</a><a href="/page/6">6</a><a href="/page/7">7</a></div></div>
+        </blockquote>
+    			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				                        <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/03/Cordova-study-1" > Cordova学习(基础使用流程) </a>
+                        <span class="fa fa-clock-o"> 2018-10-03 </span>
+                    </h2>
+                    <section><p>Apache Cordova是一个开源移动开发框架。它允许您使用标准Web技术 - HTML5，CSS3和JavaScript进行跨平台开发。<br>应用程序在针对每个平台的包装器中执行，并依赖符合标准的API来访问每个设备的功能，如传感器，数据，网络状态等。</p><h3><a name='安装' title='安装'></a>安装</h3><pre><code class="language-bash">[~]# sudo npm install -g cordova</code></pre><p>创建一个项目</p><pre><code class="language-bash">[~]# cordova create hello com.example.hello HelloWorld
+[hello]# cd hello</code></pre><h3><a name='添加平台' title='添加平台'></a>添加平台</h3><pre><code class="language-bash">[hello]# cordova platform add ios
+[hello]# cordova platform add android
+// 检查当前的平台集：
+[hello]# cordova platform ls</code></pre></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/10/02/php-pear-pecl" > PHP中pear和pecl的区别和联系 </a>
+                        <span class="fa fa-clock-o"> 2018-10-02 </span>
+                    </h2>
+                    <section><h3><a name='Pear' title='Pear'></a>Pear</h3><p>是PHP的扩展代码包，所有的扩展均以PHP代码的形式出现，功能强大，安装简单，甚至可以改改就用。使用的时候，要在代码中进行Include才能够使用。</p><p><strong>它里面的扩展是完全用PHP代码写的函数和类</strong></p><h3><a name='Pecl' title='Pecl'></a>Pecl</h3><p>是PHP的标准扩展，可以补充实际开发中所需的功能，所有的扩展都需要安装，在Windows下面以Dll的形式出现，在linux下面，需要单独进行编译，它的表现形式为根据PHP官方的标准用C语言写成，尽管源码开放但是一般人无法随意更改源码。</p><p><strong>它里面的扩展是用c或者c++编写外部模块加载至php中</strong></p><h3><a name='Pear是PHP的上层扩展，Pecl是PHP的底层扩展。**' title='Pear是PHP的上层扩展，Pecl是PHP的底层扩展。**'></a>Pear是PHP的上层扩展，Pecl是PHP的底层扩展。**</h3><p> <br>从使用角度来说，两者都是为特定的应用提供一套函数或类的工具，区别的只是实现的方式方法不同，但是最终目的一样。</p><h3><a name='举例说明' title='举例说明'></a>举例说明</h3><p>gearman扩展有两种扩展方式（见官网）</p><p>官网下载里面有这样一段描述，<br><a href="http://gearman.org/download/">Gearman扩展下载专区</a></p></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/09/27/lumen-cross-request" > Lumen跨域问题解决方法 </a>
+                        <span class="fa fa-clock-o"> 2018-09-27 </span>
+                    </h2>
+                    <section><p>一般我们在设置跨域的时候，只需要在入口文件头部加上允许跨域的header头就可以了<br>客户端在发送复杂请求的时候会发送一个options请求；</p><blockquote>注意：该请求方法的响应不能缓存。<br>OPTIONS请求方法的主要用途有两个：<br>1、获取服务器支持的HTTP请求方法；也是黑客经常使用的方法。<br>2、用来检查服务器的性能。例如：AJAX进行跨域请求时的预检，需要向另外一个域名的资源发送一个HTTP OPTIONS请求头，用以判断实际发送的请求是否安全。</blockquote><p>这就需要我们在每一个同样的请求路径的情况下，多设置一条options路由，</p><pre><code class="language-php">// 这是实际的业务资源请求
+$router-&gt;get('/', 'uses'=&gt;'IndexController@index']);
+// 这是应付复杂请求的情况下，设置的options请求
+$router-&gt;options('/', 'uses'=&gt;'IndexController@index']);
+...
+// 有多少个业务资源请求，我们就需要设置多少个options请求</code></pre><p>这种设计明显不现实，而且我们在实际使用中很少使用option来做资源路由；<br>这种问题是lumen本身没有处理关于options请求的关系造成，<br>Slim框架处理办法：</p></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/09/23/srwords-plugin-develop-note" > SrWords社会化评论插件开发笔记 </a>
+                        <span class="fa fa-clock-o"> 2018-09-23 </span>
+                    </h2>
+                    <section><p>之前有几个社会化评论插件，都已经关闭了，剩下一个‘畅言’（也不能畅言），但是收费吓死人，普通的博客主我想应该不会去花999/年去升级一个免广告畅言。阿里云一个云主机一年的费用也就300左右，遇上活动，298元客户买3年；想想这之前的成本，估计多半都会选择忍受广告，选择免费使用。</p><p>18年7月份，我把之前的博客改版了，参考了hexo用php重新写了一个静态博客构建工具(Seeruo)，用来构建我的Blog；之间断断续续开发，实现了大部分的功能，后续还需要继续开发；</p><p>9月份的时候，觉得我的Blog应该需要一个wordpress类似的一个评论插件，所以想到了之前用过的‘多说’，于是就去找官网，发现已经停运了；畅言这种恶心的操作，让我决定自己开发一个评论插件；</p><h4><a name='1.0版本规划：' title='1.0版本规划：'></a>1.0版本规划：</h4><ol><li>先实现不盖楼的客户端业务代码逻辑</li><li>实现用户注册登陆</li><li>实现用户jwt权限认证</li><li>国庆完成1.0版本的开发</li></ol><h4><a name='主要的开发逻辑' title='主要的开发逻辑'></a>主要的开发逻辑</h4><pre><code>1.客户端渲染评论页面，生成评论框，和评论历史；
+2.获取评论历史：从服务端拉取数据列表，在客户端异步渲染；
+3.发送评论：根据用户存储的token，发送数据至服务端，验证token有效性，保存数据
+4.登陆：输入用户名/密码，请求token,保存至客户端</code></pre></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2018/09/20/seeruo-blog-build-tool-develop-note" > Seeruo1.0开发基本完成 </a>
+                        <span class="fa fa-clock-o"> 2018-09-20 </span>
+                    </h2>
+                    <section><p>截止10.13日，Seeruo1.0版本基本功能开发完毕，可以暂时投入使用，下面是快速使用手册，如需详情，请到Seeruo文档查看：<br><a href="http://seeruo.codegrids.com">Seeruo文档</a></p><h4><a name='准备开始' title='准备开始'></a>准备开始</h4><blockquote>开始安装，使用之前有些条件需要满足，当然phper应该都已经有这些了：</blockquote><ul><li>安装php，并设置环境变量: 下载地址</li><li>安装Composer工具: 下载地址</li></ul><h4><a name='Seeruo介绍' title='Seeruo介绍'></a>Seeruo介绍</h4><p>Seeruo是一个用php开发的用于快速构建静态博客(文档、笔记)的极简框架工具。使用markdown语法书写文章，用命令行模式构建静态文件，并上传至GitHub Pages或云服务器。</p><p>Seeruo具有如下特性：</p><ul><li>简单易用</li><li>快速构建</li><li>本地预览</li><li>一键发布</li></ul><p>Seeruo的开发初衷是为了用php开发一个博客系统，接触了hexo之后，吸收了hexo的一些特性，并用php开发了这套框架。<br>Seeruo陪备了基础框架，可以直接使用；也可以通过直接require框架的方式使用。</p></section>
+                </blockquote>
+            </div>
+                <blockquote class="archives-one ">
+            <div><div class="pages"><a href="/">1</a><a href="/page/2">2</a><a href="/page/3">3</a><span class="current-page">4</span><a href="/page/5">5</a><a href="/page/6">6</a><a href="/page/7">7</a></div></div>
+        </blockquote>
+    			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

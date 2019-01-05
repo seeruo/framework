@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				                        <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2016/08/29/php-install" > Linux下安装PHP </a>
+                        <span class="fa fa-clock-o"> 2016-08-29 </span>
+                    </h2>
+                    <section><h4><a name='安装epel-release的rpm源' title='安装epel-release的rpm源'></a>安装epel-release的rpm源</h4><pre><code class="language-bash">[root@Mei ~]# rpm -ivh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+[root@Mei ~]# yum -y install epel-release </code></pre><h4><a name='安装PHP7的rpm源' title='安装PHP7的rpm源'></a>安装PHP7的rpm源</h4><pre><code class="language-bash">[root@Mei ~]# rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+[root@Mei ~]# yum install php70w
+[root@Mei ~]# php -v
+PHP 7.0.29 (cli) (built: Mar 30 2018 08:06:59) ( NTS )
+Copyright (c) 1997-2017 The PHP Group
+Zend Engine v3.0.0, Copyright (c) 1998-2017 Zend Technologies</code></pre><h4><a name='安装PHP组件' title='安装PHP组件'></a>安装PHP组件</h4><pre><code class="language-bash">[root@Mei ~]# yum install php70w.x86_64 php70w-cli.x86_64 php70w-common.x86_64 php70w-gd.x86_64 php70w-ldap.x86_64 php70w-mbstring.x86_64 php70w-mcrypt.x86_64 php70w-mysql.x86_64 php70w-pdo.x86_64
+[root@Mei ~]# yum install php70w-fpm</code></pre></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2016/08/29/sublime-setting" > Sublime基础设置 </a>
+                        <span class="fa fa-clock-o"> 2016-08-29 </span>
+                    </h2>
+                    <section><h4><a name='注册码:' title='注册码:'></a>注册码:</h4><pre><code class="language-bash">    —– BEGIN LICENSE —– 
+    TwitterInc 200 User License 
+    EA7E-890007 1D77F72E 390CDD93 4DCBA022 FAF60790 61AA12C0 A37081C5 D0316412 4584D136 94D7F7D4 95BC8C1C 527DA828 560BB037 
+    D1EDDD8C AE7B379F 50C9D69D B35179EF 2FE898C4 8E4277A8 555CE714 E1FB0E43 
+    D5D52613 C3D12E98 BC49967F 7652EED2 9D2D2E61 67610860 6D338B72 5CF95C69 
+    E36B85CC 84991F19 7575D828 470A92AB 
+    —— END LICENSE ——</code></pre><h4><a name='配色方案:' title='配色方案:'></a>配色方案:</h4><blockquote>Monokai</blockquote><h4><a name='按键配置:' title='按键配置:'></a>按键配置:</h4></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2016/08/29/centos7-open-iptable" > CentOS7下开启iptable </a>
+                        <span class="fa fa-clock-o"> 2016-08-29 </span>
+                    </h2>
+                    <section><h3><a name='关闭firewall：' title='关闭firewall：'></a>关闭firewall：</h3><pre><code class="language-bash">[root@localhost ~]# systemctl stop firewalld.service            #停止firewall
+[root@localhost ~]# systemctl disable firewalld.service        #禁止firewall开机启动</code></pre><h3><a name='安装安装iptables防火墙' title='安装安装iptables防火墙'></a>安装安装iptables防火墙</h3><pre><code class="language-bash">[root@localhost ~]# yum install iptables-services            #安装</code></pre><h3><a name='修改防火墙规则' title='修改防火墙规则'></a>修改防火墙规则</h3><pre><code class="language-bash">[root@localhost ~]# vim /etc/sysconfig/iptables</code></pre><h3><a name='重启防火墙' title='重启防火墙'></a>重启防火墙</h3><pre><code class="language-bash">[root@localhost ~]# systemctl restart iptables</code></pre><h3><a name='设置开机自启动' title='设置开机自启动'></a>设置开机自启动</h3></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2016/08/29/sambar-install" > Linux下安装Sambar </a>
+                        <span class="fa fa-clock-o"> 2016-08-29 </span>
+                    </h2>
+                    <section><p>注意：一定要关闭SELINUX</p><h3><a name='防火墙端口开放' title='防火墙端口开放'></a>防火墙端口开放</h3><pre><code class="language-bash">[root@base ~]# vim /etc/sysconfig/iptables
+-A INPUT -p udp -m state --state NEW -m udp --dport 137 -j ACCEPT
+-A INPUT -p udp -m state --state NEW -m udp --dport 138 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 139 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 389 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 445 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 901 -j ACCEPT
+
+[root@base ~]# yum -y install samba samba-client</code></pre><h3><a name='设置开机启动' title='设置开机启动'></a>设置开机启动</h3><pre><code class="language-bash">[root@base ~]# systemctl enable smb</code></pre><p>备份原始配置，并配置新配置文件</p></section>
+                </blockquote>
+            </div>
+                    <div class="content-block">
+                <blockquote class="article-one ">
+                    <h2>
+                        <a href="/articles/2016/08/29/model-contact" > 模型关联 </a>
+                        <span class="fa fa-clock-o"> 2016-08-29 </span>
+                    </h2>
+                    <section><pre><code class="language-php">&lt;?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    /**
+     * 获取与用户关联的电话号码记录。
+     */
+    public function phone()
+    {
+        return $this-&gt;hasOne('App\Phone', 'id', 'u_id');
+    }
+}</code></pre><p>使用:</p></section>
+                </blockquote>
+            </div>
+                <blockquote class="archives-one ">
+            <div><div class="pages"><a href="/">1</a><a href="/page/2">2</a><a href="/page/3">3</a><a href="/page/4">4</a><a href="/page/5">5</a><span class="current-page">6</span><a href="/page/7">7</a></div></div>
+        </blockquote>
+    			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

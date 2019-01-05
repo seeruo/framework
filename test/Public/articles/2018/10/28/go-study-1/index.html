@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> Golang学习1（开发环境配置） -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>Golang学习1（开发环境配置）</h2>
+		
+		<p>Mac下安装golang</p><pre><code class="language-bash">[~] brew install go@1.9
+==&gt; Downloading https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles/go@1.9-1.9.7
+######################################################################## 100.0%
+==&gt; Pouring go@1.9-1.9.7.mojave.bottle.tar.gz
+==&gt; Caveats
+A valid GOPATH is required to use the `go get` command.
+If $GOPATH is not specified, $HOME/go will be used by default:
+  https://golang.org/doc/code.html#GOPATH
+
+You may wish to add the GOROOT-based install location to your PATH:
+  export PATH=$PATH:/usr/local/opt/go@1.9/libexec/bin
+
+go@1.9 is keg-only, which means it was not symlinked into /usr/local,
+because this is an alternate version of another formula.
+
+If you need to have go@1.9 first in your PATH run:
+  echo 'export PATH=&quot;/usr/local/opt/go@1.9/bin:$PATH&quot;' &gt;&gt; ~/.bash_profile
+
+==&gt; Summary
+🍺  /usr/local/Cellar/go@1.9/1.9.7: 7,668 files, 294.2MB</code></pre><p>配置环境变量,查看版本</p><pre><code class="language-bash">[~] export PATH=$PATH:/usr/local/opt/go@1.9/libexec/bin
+[~] go version
+go version go1.9.7 darwin/amd64</code></pre>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: Danier(左浪)</li>
+				<li>本文链接: http://www.example.com/articles/2018/10/28/go-study-1</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

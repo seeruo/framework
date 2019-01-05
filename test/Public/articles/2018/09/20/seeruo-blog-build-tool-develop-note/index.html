@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> Seeruo1.0开发基本完成 -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>Seeruo1.0开发基本完成</h2>
+		
+		<p>截止10.13日，Seeruo1.0版本基本功能开发完毕，可以暂时投入使用，下面是快速使用手册，如需详情，请到Seeruo文档查看：<br><a href="http://seeruo.codegrids.com">Seeruo文档</a></p><h4><a name='准备开始' title='准备开始'></a>准备开始</h4><blockquote>开始安装，使用之前有些条件需要满足，当然phper应该都已经有这些了：</blockquote><ul><li>安装php，并设置环境变量: 下载地址</li><li>安装Composer工具: 下载地址</li></ul><h4><a name='Seeruo介绍' title='Seeruo介绍'></a>Seeruo介绍</h4><p>Seeruo是一个用php开发的用于快速构建静态博客(文档、笔记)的极简框架工具。使用markdown语法书写文章，用命令行模式构建静态文件，并上传至GitHub Pages或云服务器。</p><p>Seeruo具有如下特性：</p><ul><li>简单易用</li><li>快速构建</li><li>本地预览</li><li>一键发布</li></ul><p>Seeruo的开发初衷是为了用php开发一个博客系统，接触了hexo之后，吸收了hexo的一些特性，并用php开发了这套框架。<br>Seeruo陪备了基础框架，可以直接使用；也可以通过直接require框架的方式使用。</p><h4><a name='版本说明' title='版本说明'></a>版本说明</h4><p>截止10.13日，Seeruo1.0版本基本功能开发完毕，可以暂时投入使用。</p><h4><a name='版本规划' title='版本规划'></a>版本规划</h4><p>需要开发的功能<br>1、排序规则，时间先后顺序的配置项<br>2、是否忽略解析，在每个文章里面配置 或者 在配置文件里面配置<br>3、上传原始文件到仓库的配置、拉取原始文件的配置</p><h4><a name='快速开始' title='快速开始'></a>快速开始</h4><pre><code class="language-shell">[~]# composer create-project seeruo/seeruo myblog
+[~]# cd myblog
+[App]# cd myblog/App
+[App]# php seeruo create test
+[App]# php seeruo build
+[App]# php seeruo server</code></pre><p>更多使用细则，请参考详细使用手册。</p>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: Danier(左浪)</li>
+				<li>本文链接: http://www.example.com/articles/2018/09/20/seeruo-blog-build-tool-develop-note</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

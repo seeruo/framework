@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> PHP中pear和pecl的区别和联系 -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>PHP中pear和pecl的区别和联系</h2>
+		
+		<h3><a name='Pear' title='Pear'></a>Pear</h3><p>是PHP的扩展代码包，所有的扩展均以PHP代码的形式出现，功能强大，安装简单，甚至可以改改就用。使用的时候，要在代码中进行Include才能够使用。</p><p><strong>它里面的扩展是完全用PHP代码写的函数和类</strong></p><h3><a name='Pecl' title='Pecl'></a>Pecl</h3><p>是PHP的标准扩展，可以补充实际开发中所需的功能，所有的扩展都需要安装，在Windows下面以Dll的形式出现，在linux下面，需要单独进行编译，它的表现形式为根据PHP官方的标准用C语言写成，尽管源码开放但是一般人无法随意更改源码。</p><p><strong>它里面的扩展是用c或者c++编写外部模块加载至php中</strong></p><h3><a name='Pear是PHP的上层扩展，Pecl是PHP的底层扩展。**' title='Pear是PHP的上层扩展，Pecl是PHP的底层扩展。**'></a>Pear是PHP的上层扩展，Pecl是PHP的底层扩展。**</h3><p> <br>从使用角度来说，两者都是为特定的应用提供一套函数或类的工具，区别的只是实现的方式方法不同，但是最终目的一样。</p><h3><a name='举例说明' title='举例说明'></a>举例说明</h3><p>gearman扩展有两种扩展方式（见官网）</p><p>官网下载里面有这样一段描述，<br><a href="http://gearman.org/download/">Gearman扩展下载专区</a><br><img src="/static/images/gearman.png" alt="gearman" title="gearman"></p><p>然后我们同时使用两种方式来安装一下gearman，看看组件有什么不同</p><pre><code class="language-bash">[Du]# pecl search gearman
+Retrieving data...0%
+Matched packages, channel pecl.php.net:
+=======================================
+Package Stable/(Latest) Local
+gearman 1.1.2 (stable)        PHP wrapper to libgearman
+[Du]#
+[Du]# pear search gearman
+Retrieving data...0%
+Matched packages, channel pear.php.net:
+=======================================
+Package     Stable/(Latest) Local
+Net_Gearman 0.2.3 (alpha)         A PHP interface to Gearman</code></pre><p>我们可以发现两种方式查找的扩展，结果并不相同</p><p>好了，到这里应该弄明白两种的区别了</p>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: Danier(左浪)</li>
+				<li>本文链接: http://www.example.com/articles/2018/10/02/php-pear-pecl</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

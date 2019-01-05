@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> Lumen跨域问题解决方法 -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>Lumen跨域问题解决方法</h2>
+		
+		<p>一般我们在设置跨域的时候，只需要在入口文件头部加上允许跨域的header头就可以了<br>客户端在发送复杂请求的时候会发送一个options请求；</p><blockquote>注意：该请求方法的响应不能缓存。<br>OPTIONS请求方法的主要用途有两个：<br>1、获取服务器支持的HTTP请求方法；也是黑客经常使用的方法。<br>2、用来检查服务器的性能。例如：AJAX进行跨域请求时的预检，需要向另外一个域名的资源发送一个HTTP OPTIONS请求头，用以判断实际发送的请求是否安全。</blockquote><p>这就需要我们在每一个同样的请求路径的情况下，多设置一条options路由，</p><pre><code class="language-php">// 这是实际的业务资源请求
+$router-&gt;get('/', 'uses'=&gt;'IndexController@index']);
+// 这是应付复杂请求的情况下，设置的options请求
+$router-&gt;options('/', 'uses'=&gt;'IndexController@index']);
+...
+// 有多少个业务资源请求，我们就需要设置多少个options请求</code></pre><p>这种设计明显不现实，而且我们在实际使用中很少使用option来做资源路由；<br>这种问题是lumen本身没有处理关于options请求的关系造成，<br>Slim框架处理办法：</p><pre><code class="language-php">public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $methods)
+{
+    if ($request-&gt;getMethod() === 'OPTIONS') {
+        $status = 200;
+        $contentType = 'text/plain';
+        $output = $this-&gt;renderPlainOptionsMessage($methods);
+    } else {
+        //...
+    }
+    //...
+}
+</code></pre><p>所以基于上面的需求，在lumen中，我们可以添加一个全局中间件去处理options的请求；</p><h4><a name='第一步：创建一个中间件('CrossRequestMiddleware.php')' title='第一步：创建一个中间件('CrossRequestMiddleware.php')'></a>第一步：创建一个中间件('CrossRequestMiddleware.php')</h4><pre><code class="language-php">&lt;?php
+namespace App\Http\Middleware;
+
+use Closure;
+
+/**
+ * 跨域中间件，主要处理 options 请求问题
+ */
+class CrossRequestMiddleware
+{
+    public function handle($request, Closure $next)
+    {
+        // 获取跨域配置
+        $config = config('crossRequest');
+        $origin = $request-&gt;server('HTTP_ORIGIN') ? $request-&gt;server('HTTP_ORIGIN') : '';
+        // 检查是否允许跨域
+        if (in_array($origin, $config['Origin'])) {
+            header('Content-Type: text/html; charset= UTF-8');
+            // 只允许来自http://localhost:9001的跨域请求
+            header(&quot;Access-Control-Allow-Origin: {$origin}&quot;); // 允许跨域
+            // 允许的请求方法
+            header(&quot;Access-Control-Allow-Methods: {$config['Methods']}&quot;);
+            // 允许的请求头(包括自定义Authorization)，
+            header(&quot;Access-Control-Allow-Headers: {$config['Headers']}&quot;);
+        }
+        // 检查请求的方法是否是options，如果是直接返回200
+        if ($request-&gt;isMethod('options')) {
+            return response('This Is Options Request!', 200);
+        }
+        return $next($request);
+    }
+}</code></pre><h4><a name='第二步：然后在内核文件注册该全局中间件('bootstrap/app.php')' title='第二步：然后在内核文件注册该全局中间件('bootstrap/app.php')'></a>第二步：然后在内核文件注册该全局中间件('bootstrap/app.php')</h4><pre><code class="language-php">// 注册全局中间件
+$app-&gt;middleware([
+   App\Http\Middleware\CrossRequestMiddleware::class
+]);</code></pre>
+
+				<blockquote class="author_block">
+			<ul>
+				<li>本文作者: Danier(左浪)</li>
+				<li>本文链接: http://www.example.com/articles/2018/09/27/lumen-cross-request</li>
+				<li>版权声明: 本博客所有文章除特别声明外，转载请注明出处！</li>
+			</ul>
+		</blockquote>
+		<div id="SeeruoWords"></div>
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

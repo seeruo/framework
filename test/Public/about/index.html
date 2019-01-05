@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta author="">
+	<meta description="">
+	<meta keywords="">
+	<title> 关于 -  SeeRuo</title>
+	<link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/prism/prism.css">
+	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/srsearch/srsearch.css">
+    <script type="text/javascript" src="/static/srsearch/srsearch.js"></script>
+</head>
+
+<body>
+	<main>
+		<div class="sibar">
+			<div class="author_header">
+				<img src="/static/images/author.jpeg">
+			</div>
+			<div class="logo">
+				<a href="/">SeeRuo</a>
+				<small>< 轻量化静态网站构建工具 ></small>
+			</div>
+			<div class="menu">
+				<a href="/">主页</a>
+				<a href="/archives">归档</a>
+				<a href="/about">关于</a>
+				<a href="/linker">友链</a>
+			</div>
+			
+			<div class="links">
+				<a target="_blank" href="http://seeruo.codegrids.com">Sr</a>
+				<a target="_blank" href="https://github.com/seeruo"><i class="fa fa-github"></i></a>
+				<a target="_blank" href="mailto:cdking95@gmail.com"><i class="fa fa-envelope-o"> </i></a>
+				<a><i class="fa fa-search" id="searchDiv"></i></a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="markdown-body">
+				<link rel="stylesheet" type="text/css" href="/static/srwords/srwords.css">
+<script type="text/javascript" src="/static/srwords/srwords.js"></script>
+<style type="text/css">
+    #SeeruoWords{
+        margin-top: 50px;
+    }
+</style>
+<div class="content-block">
+	<section>
+				<h2>关于</h2>
+		
+		<blockquote>个人介绍</blockquote><p>我是Danier，PHP程序员，没有很多高大上的噱头，以前是因为钱写代码，现在是因为个人爱好(想要更多的钱)而写代码，当然也多了些其他的东西。写代码总得有点兴趣才能坚持，我的兴趣就是可劲折腾，树莓派、Unity游戏开发、Canvas网页游戏开发(phaser、createJs)、机器人对话...，觉得有趣的都想玩玩。</p><blockquote>联系我</blockquote><ul><li><a href="mailto:cdking95@qq.com" target="_blank">cdking95@qq.com</a></li><li><a href="https://github.com/seeruo" target="_blank">Git</a></li><li>QQ: 552850955</li></ul><blockquote>专业技能</blockquote><ul><li>精通: php</li><li>熟悉: html, css, jquery, vue</li><li>了解: swoole,python, go, c#</li><li>数据库: MySQL,MongoDB</li><li>缓存: Redis</li><li>优化工具: Photoshop</li></ul><blockquote>本站介绍</blockquote><p>本站由自己开发的一套静态网站构建工具(<a href="https://github.com/seeruo/seeruo.git">Seeruo</a>)创建，</p><ul><li>采用markdown语法写文章</li><li>命令行构建静态网页</li><li>本地预览</li><li>快速部署到空间</li></ul><blockquote>废话...</blockquote><p>本站还在开发中，至于会开发到什么地步，我也不知道^-^...</p><h4><a name='本站开发历程' title='本站开发历程'></a>本站开发历程</h4><ul><li>2018-10-10 前段搜索工具SrSearch插件开发，接入系统</li><li>2018-09-28 社交评论工具SrWords基础框架功能开发完成，使用lumen作为1.0版本的框架支撑</li><li>2018-09-22 引入PrismJS，用来实现代码块高亮样式</li><li>2018-09-18 重新开发一套前端主题</li><li>2018-08-26 使用多进程特性重构:'创建本地预览服务'、'文件实时渲染'，因为不兼容Windows暂停该方案</li><li>2018-08-24 开始重构Seeruo工具，优化一些业务逻辑和功能</li><li>2018-08-12 开始开发Seeruo</li></ul>
+
+		
+	</section>
+	<script type="text/javascript">
+		document.querySelector('body').onload= function () {
+			SrWords('#SeeruoWords',{
+	            // apiBase:"http://api.codegrids.com/api"
+	        })
+		}
+	</script>
+</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/prism/prism.js"></script>
+	<script type="text/javascript">
+		SrSearch('#searchDiv',{
+            // apiBase:"http://www.codegrids.com/articles"
+        })
+	</script>
+</body>
+</html>

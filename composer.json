@@ -1,16 +1,17 @@
 {
     "name": "seeruo/framework",
-    "description": "this is a tool that build static website by php",
+    "description": "这是一个用php开发的用于快速构建静态网站的工具(重构版)",
+    "license": "MIT",
     "type": "library",
     "require": {
         "php": ">=5.6",
-        "twig/twig":"^1.0"
+        "twig/twig":"^1.0",
+        "symfony/console": "^4.2",
+        "symfony/filesystem": "^4.2"
     },
     "require-dev": {
-        "php": ">=5.6",
-        "twig/twig":"^1.0"
+        "php": ">=5.6"
     },
-    "license": "MIT",
     "authors": [
         {
             "name": "Danier Seeruo",
@@ -19,13 +20,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "Seeruo\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Seeruo\\": "src/"
-        }
+            "App\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "minimum-stability": "dev"
 }

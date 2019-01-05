@@ -1,0 +1,11 @@
+#!/d/php7/bin/php
+<?php
+define('ROOT', __DIR__);
+
+require ROOT.'/../vendor/autoload.php';
+
+$config = require ROOT.'/Config/config.php';
+
+$application = new App\Application($config);
+
+$application->run();
