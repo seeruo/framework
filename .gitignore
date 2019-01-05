@@ -1,7 +1,8 @@
 /vendor
+test/Public/*
+test/Config/lock.key
 composer.phar
 composer.lock
-tests/Public/*
 .DS_Store
 Thumbs.db
 /phpunit.xml
